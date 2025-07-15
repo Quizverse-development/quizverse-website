@@ -7,7 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { getServerSession } from "next-auth"
-import authOptions from "@/lib/auth"
+import { authOptions } from "@/lib/auth"
 
 const inter = Inter({ subsets: ["latin"] })
 
