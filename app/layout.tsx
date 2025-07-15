@@ -5,6 +5,7 @@ import "./globals.css"
 import AuthProvider from "@/components/auth-provider"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import { auth } from "@/lib/auth"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -34,6 +35,7 @@ export default async function RootLayout({
           <AuthProvider session={session}>
             {children}
             <Toaster />
+            <SpeedInsights />
           </AuthProvider>
         </ThemeProvider>
       </body>
