@@ -14,7 +14,6 @@ const ADMIN_EMAIL = "ben.steels@outlook.com"
 
 // Demo users
 const DEMO_USERS = [
-  { id: "1", email: "ben.steels@outlook.com", name: "Ben Steels", isAdmin: true },
   { id: "2", email: "teacher@school.com", name: "Teacher Demo", isAdmin: false },
   { id: "3", email: "student@school.com", name: "Student Demo", isAdmin: false },
 ]
