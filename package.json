@@ -9,7 +9,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "@auth/core": "^0.34.2",
+    "next-auth": "^4.24.7",
     "@hookform/resolvers": "^3.9.1",
     "@vercel/speed-insights": "^1.0.12",
     "@radix-ui/react-accordion": "1.2.2",

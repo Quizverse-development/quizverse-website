@@ -1,9 +1,3 @@
-import { NextResponse } from "next/server"
+import NextAuth from "@/lib/auth"
 
-export async function GET() {
-  return NextResponse.json({ message: "Demo auth - no setup needed" })
-}
-
-export async function POST() {
-  return NextResponse.json({ message: "Demo auth - no setup needed" })
-}
+export { NextAuth as GET, NextAuth as POST }

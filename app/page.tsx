@@ -1,74 +1,123 @@
-import { Header } from "@/components/header"
+"use client"
+
+import { useSession } from "next-auth/react"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Header } from "@/components/header"
+import { JoinGameDialog } from "@/components/join-game-dialog"
+import { CreateGameDialog } from "@/components/create-game-dialog"
+import { Play, Users, Trophy, Zap } from "lucide-react"
 import Link from "next/link"
-import { Play, Search } from "lucide-react"
 
 export default function HomePage() {
+  const { data: session } = useSession()
+
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-br from-purple-50 via-white to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100">
       <Header />
-      <main className="flex flex-col items-center justify-center flex-grow text-center max-w-4xl mx-auto px-4 pt-32 pb-8">
-        <div className="space-y-8">
-          <div className="space-y-4">
-            <h1 className="text-5xl md:text-7xl font-extrabold text-gray-900 mb-4 leading-tight">
-              Welcome to <span className="text-purple-600">Quizverse</span>
-            </h1>
-            <p className="text-lg md:text-xl text-gray-700 max-w-2xl mx-auto">
-              Explore a universe of quizzes on various topics. Test your knowledge, learn new things, and challenge your
-              friends!
-            </p>
-          </div>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" className="bg-purple-600 hover:bg-purple-700">
-              <Link href="/create-game">
-                <Play className="mr-2 h-5 w-5" />
-                Start Quizzing
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="border-purple-600 text-purple-600 hover:bg-purple-50">
-              <Link href="/search">
-                <Search className="mr-2 h-5 w-5" />
-                Browse Categories
-              </Link>
-            </Button>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 max-w-3xl mx-auto">
-            <div className="text-center p-6 rounded-lg bg-white/50 backdrop-blur-sm border">
-              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Play className="h-6 w-6 text-purple-600" />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Create Games</h3>
-              <p className="text-sm text-gray-600">Host your own quiz games and invite friends to join</p>
+      <main className="container mx-auto px-4 pt-24 pb-8">
+        {!session ? (
+          // Landing page for non-authenticated users
+          <div className="text-center space-y-8">
+            <div className="space-y-4">
+              <h1 className="text-5xl font-bold text-gray-900">
+                Welcome to <span className="text-purple-600">QuizVerse</span>
+              </h1>
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                Create, host, and join interactive quiz games. Perfect for classrooms, team building, and fun with friends!
+              </p>
             </div>
-            
-            <div className="text-center p-6 rounded-lg bg-white/50 backdrop-blur-sm border">
-              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Search className="h-6 w-6 text-purple-600" />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Join Games</h3>
-              <p className="text-sm text-gray-600">Enter a game code to join exciting quiz challenges</p>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+              <Card className="text-center">
+                <CardHeader>
+                  <Play className="h-12 w-12 text-purple-600 mx-auto mb-2" />
+                  <CardTitle>Host Games</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">Create and host live quiz games with real-time participation</p>
+                </CardContent>
+              </Card>
+
+              <Card className="text-center">
+                <CardHeader>
+                  <Users className="h-12 w-12 text-purple-600 mx-auto mb-2" />
+                  <CardTitle>Join Games</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">Enter a game code and compete with others in real-time</p>
+                </CardContent>
+              </Card>
+
+              <Card className="text-center">
+                <CardHeader>
+                  <Trophy className="h-12 w-12 text-purple-600 mx-auto mb-2" />
+                  <CardTitle>Create Quizzes</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">Build custom quizzes with multiple choice questions</p>
+                </CardContent>
+              </Card>
             </div>
-            
-            <div className="text-center p-6 rounded-lg bg-white/50 backdrop-blur-sm border">
-              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <div className="w-6 h-6 bg-purple-600 rounded-full" />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Track Progress</h3>
-              <p className="text-sm text-gray-600">Monitor your quiz performance and achievements</p>
+
+            <div className="space-y-4">
+              <p className="text-lg text-gray-700">Sign in with your Microsoft account to get started</p>
+              <Button size="lg" onClick={() => window.location.href = "/api/auth/signin"}>
+                <Zap className="mr-2 h-5 w-5" />
+                Get Started
+              </Button>
             </div>
           </div>
-        </div>
+        ) : (
+          // Dashboard for authenticated users
+          <div className="space-y-8">
+            <div className="text-center space-y-4">
+              <h1 className="text-4xl font-bold text-gray-900">
+                Welcome back, {session.user?.name?.split(' ')[0]}!
+              </h1>
+              <p className="text-lg text-gray-600">What would you like to do today?</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                <CardHeader className="text-center">
+                  <Play className="h-16 w-16 text-purple-600 mx-auto mb-4" />
+                  <CardTitle className="text-2xl">Host a Game</CardTitle>
+                </CardHeader>
+                <CardContent className="text-center space-y-4">
+                  <p className="text-gray-600">Start a live quiz game and get a code for others to join</p>
+                  <CreateGameDialog />
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                <CardHeader className="text-center">
+                  <Users className="h-16 w-16 text-purple-600 mx-auto mb-4" />
+                  <CardTitle className="text-2xl">Join a Game</CardTitle>
+                </CardHeader>
+                <CardContent className="text-center space-y-4">
+                  <p className="text-gray-600">Enter a game code to join an active quiz</p>
+                  <JoinGameDialog />
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="text-center space-y-4">
+              <h2 className="text-2xl font-semibold text-gray-800">Explore More</h2>
+              <div className="flex justify-center gap-4">
+                <Button variant="outline" asChild>
+                  <Link href="/search">Browse Public Quizzes</Link>
+                </Button>
+                {session.user?.isAdmin && (
+                  <Button variant="outline" asChild>
+                    <Link href="/admin">Admin Dashboard</Link>
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </main>
-      
-      <footer className="mt-auto py-6 border-t bg-white/50 backdrop-blur-sm">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <p className="text-gray-600 text-sm">
-            &copy; {new Date().getFullYear()} Quizverse. All rights reserved.
-          </p>
-        </div>
-      </footer>
     </div>
   )
 }

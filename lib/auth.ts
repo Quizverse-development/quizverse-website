@@ -1,26 +1,38 @@
-// Simple demo auth without NextAuth
-export interface User {
-  id: string
-  email: string
-  name: string
-  isAdmin: boolean
-}
+import NextAuth from "next-auth"
+import AzureADProvider from "next-auth/providers/azure-ad"
 
-export interface Session {
-  user: User
-}
+const ADMIN_EMAIL = "ben.steels@outlook.com"
 
-export const ADMIN_EMAIL = "ben.steels@outlook.com"
+export default NextAuth({
+  providers: [
+    AzureADProvider({
+      clientId: process.env.AZURE_AD_CLIENT_ID!,
+      clientSecret: process.env.AZURE_AD_CLIENT_SECRET!,
+      tenantId: process.env.AZURE_AD_TENANT_ID!,
+    }),
+  ],
+  callbacks: {
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.sub!
+        session.user.isAdmin = session.user.email === ADMIN_EMAIL
+      }
+      return session
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token.isAdmin = user.email === ADMIN_EMAIL
+      }
+      return token
+    },
+  },
+  pages: {
+    signIn: "/auth/signin",
+  },
+  session: {
+    strategy: "jwt",
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+})
 
-// Mock session for demo
-export async function getServerSession(): Promise<Session | null> {
-  // In demo mode, return admin session
-  return {
-    user: {
-      id: "demo-admin",
-      email: ADMIN_EMAIL,
-      name: "Ben Steels",
-      isAdmin: true
-    }
-  }
-}
+export { default as authOptions }
