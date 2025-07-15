@@ -1,15 +1,28 @@
 import NextAuth from "next-auth"
-import AzureADProvider from "next-auth/providers/azure-ad"
-import GoogleProvider from "next-auth/providers/google"
+import CredentialsProvider from "next-auth/providers/credentials"
 import type { NextAuthConfig } from "next-auth"
 
 const ADMIN_EMAIL = "ben.steels@outlook.com"
 
 const config: NextAuthConfig = {
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    CredentialsProvider({
+      name: "Demo Login",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        name: { label: "Name", type: "text" }
+      },
+      async authorize(credentials) {
+        if (credentials?.email) {
+          return {
+            id: Math.random().toString(),
+            email: credentials.email as string,
+            name: credentials.name as string || "User",
+            isAdmin: credentials.email === ADMIN_EMAIL
+          }
+        }
+        return null
+      },
     }),
   ],
   callbacks: {

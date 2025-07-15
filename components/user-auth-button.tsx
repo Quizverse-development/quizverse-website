@@ -50,9 +50,9 @@ export default function UserAuthButton() {
   }
 
   return (
-    <Button onClick={() => signIn("google")} variant="outline">
+    <Button onClick={() => signIn()} variant="outline">
       <User className="mr-2 h-4 w-4" />
-      Sign in with Google
+      Demo Sign In
     </Button>
   )
 }
