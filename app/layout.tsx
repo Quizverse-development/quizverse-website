@@ -6,8 +6,7 @@ import AuthProvider from "@/components/auth-provider"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
 import { SpeedInsights } from '@vercel/speed-insights/next'
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
+import { getServerSession } from "@/lib/auth"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -22,7 +21,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   
   return (
     <html lang="en" suppressHydrationWarning>
