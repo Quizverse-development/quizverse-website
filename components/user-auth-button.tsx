@@ -50,15 +50,9 @@ export default function UserAuthButton() {
   }
 
   return (
-    <div className="flex gap-2">
-      <Button onClick={() => signIn("azure-ad")} variant="outline">
-        <User className="mr-2 h-4 w-4" />
-        Sign in with Microsoft
-      </Button>
-      <Button onClick={() => signIn("google")} variant="outline">
-        <User className="mr-2 h-4 w-4" />
-        Sign in with Google
-      </Button>
-    </div>
+    <Button onClick={() => signIn("google")} variant="outline">
+      <User className="mr-2 h-4 w-4" />
+      Sign in with Google
+    </Button>
   )
 }
