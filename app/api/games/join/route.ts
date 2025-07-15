@@ -22,7 +22,9 @@ export async function POST(request: NextRequest) {
       name: session.user.name || "Anonymous",
       email: session.user.email!,
       score: 0,
-      answers: []
+      answers: [],
+      joinedAt: new Date(),
+      isReady: false
     }
 
     const existingPlayerIndex = gameSession.players.findIndex(p => p.id === player.id)

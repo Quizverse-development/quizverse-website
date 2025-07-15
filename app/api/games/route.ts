@@ -22,10 +22,18 @@ export async function POST(request: NextRequest) {
     const gameSession = db.createGameSession({
       quizId,
       hostId: session.user.id,
+      hostName: session.user.name || "Host",
       gameCode,
       isActive: true,
       players: [],
       currentQuestion: 0,
+      status: "waiting",
+      settings: {
+        allowLateJoin: true,
+        showLeaderboard: true,
+        randomizeQuestions: false,
+        maxPlayers: 50
+      }
     })
 
     return NextResponse.json(gameSession)
