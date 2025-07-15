@@ -1,10 +1,9 @@
 import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
-import type { NextAuthConfig } from "next-auth"
 
 const ADMIN_EMAIL = "ben.steels@outlook.com"
 
-const config: NextAuthConfig = {
+export default NextAuth({
   providers: [
     CredentialsProvider({
       name: "Demo Login",
@@ -16,8 +15,8 @@ const config: NextAuthConfig = {
         if (credentials?.email) {
           return {
             id: Math.random().toString(),
-            email: credentials.email as string,
-            name: credentials.name as string || "User",
+            email: credentials.email,
+            name: credentials.name || "User",
             isAdmin: credentials.email === ADMIN_EMAIL
           }
         }
@@ -29,7 +28,7 @@ const config: NextAuthConfig = {
     async session({ session, token }) {
       if (token.sub && session.user) {
         session.user.id = token.sub
-        session.user.isAdmin = session.user.email === ADMIN_EMAIL
+        session.user.isAdmin = token.email === ADMIN_EMAIL
       }
       return session
     },
@@ -42,19 +41,10 @@ const config: NextAuthConfig = {
     },
   },
   pages: {
-    signIn: "/",
+    signIn: "/auth/signin",
   },
   session: {
     strategy: "jwt",
   },
   secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
-}
-
-export const {
-  handlers: { GET, POST },
-  auth,
-  signIn,
-  signOut,
-} = NextAuth(config)
-
-export { config as authConfig }
+})
