@@ -1,6 +1,6 @@
 "use client"
 
-import { useSession } from "next-auth/react"
+import { useSession } from "@/components/auth-provider"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Header } from "@/components/header"
@@ -61,10 +61,12 @@ export default function HomePage() {
             </div>
 
             <div className="space-y-4">
-              <p className="text-lg text-gray-700">Sign in with your Microsoft account to get started</p>
-              <Button size="lg" onClick={() => window.location.href = "/api/auth/signin"}>
-                <Zap className="mr-2 h-5 w-5" />
-                Get Started
+              <p className="text-lg text-gray-700">Choose a demo account to get started</p>
+              <Button size="lg" asChild>
+                <Link href="/auth/signin">
+                  <Zap className="mr-2 h-5 w-5" />
+                  Get Started
+                </Link>
               </Button>
             </div>
           </div>

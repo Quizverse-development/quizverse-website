@@ -1,38 +1,29 @@
-import NextAuth from "next-auth"
-import AzureADProvider from "next-auth/providers/azure-ad"
+// Simple demo auth system
+export interface User {
+  id: string
+  email: string
+  name: string
+  isAdmin: boolean
+}
+
+export interface Session {
+  user: User
+}
 
 const ADMIN_EMAIL = "ben.steels@outlook.com"
 
-export default NextAuth({
-  providers: [
-    AzureADProvider({
-      clientId: process.env.AZURE_AD_CLIENT_ID!,
-      clientSecret: process.env.AZURE_AD_CLIENT_SECRET!,
-      tenantId: process.env.AZURE_AD_TENANT_ID!,
-    }),
-  ],
-  callbacks: {
-    async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.sub!
-        session.user.isAdmin = session.user.email === ADMIN_EMAIL
-      }
-      return session
-    },
-    async jwt({ token, user }) {
-      if (user) {
-        token.isAdmin = user.email === ADMIN_EMAIL
-      }
-      return token
-    },
-  },
-  pages: {
-    signIn: "/auth/signin",
-  },
-  session: {
-    strategy: "jwt",
-  },
-  secret: process.env.NEXTAUTH_SECRET,
-})
+// Demo users
+const DEMO_USERS = [
+  { id: "1", email: "ben.steels@outlook.com", name: "Ben Steels", isAdmin: true },
+  { id: "2", email: "teacher@school.com", name: "Teacher Demo", isAdmin: false },
+  { id: "3", email: "student@school.com", name: "Student Demo", isAdmin: false },
+]
 
-export { default as authOptions }
+export async function getServerSession(): Promise<Session | null> {
+  // Return null for server-side (no session by default)
+  return null
+}
+
+export function getDemoUsers() {
+  return DEMO_USERS
+}

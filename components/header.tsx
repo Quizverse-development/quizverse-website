@@ -5,7 +5,7 @@ import { UserAuthButton } from "@/components/user-auth-button"
 import { JoinGameDialog } from "@/components/join-game-dialog"
 import { CreateGameDialog } from "@/components/create-game-dialog"
 import { Button } from "@/components/ui/button"
-import { useSession } from "next-auth/react"
+import { useSession } from "@/components/auth-provider"
 
 export function Header() {
   const { data: session } = useSession()

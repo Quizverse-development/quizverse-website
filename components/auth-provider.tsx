@@ -1,14 +1,48 @@
 "use client"
 
-import { SessionProvider } from "next-auth/react"
-import type React from "react"
-import type { Session } from "next-auth"
+import { createContext, useContext, useState, useEffect } from "react"
+import type { Session } from "@/lib/auth"
 
-interface AuthProviderProps {
-  children: React.ReactNode
-  session?: Session | null
+const AuthContext = createContext<{
+  session: Session | null
+  signIn: (user: any) => void
+  signOut: () => void
+}>({
+  session: null,
+  signIn: () => {},
+  signOut: () => {}
+})
+
+export default function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [session, setSession] = useState<Session | null>(null)
+
+  useEffect(() => {
+    // Check localStorage for saved session
+    const saved = localStorage.getItem("demo-session")
+    if (saved) {
+      setSession(JSON.parse(saved))
+    }
+  }, [])
+
+  const signIn = (user: any) => {
+    const newSession = { user }
+    setSession(newSession)
+    localStorage.setItem("demo-session", JSON.stringify(newSession))
+  }
+
+  const signOut = () => {
+    setSession(null)
+    localStorage.removeItem("demo-session")
+  }
+
+  return (
+    <AuthContext.Provider value={{ session, signIn, signOut }}>
+      {children}
+    </AuthContext.Provider>
+  )
 }
 
-export default function AuthProvider({ children, session }: AuthProviderProps) {
-  return <SessionProvider session={session}>{children}</SessionProvider>
+export function useSession() {
+  const context = useContext(AuthContext)
+  return { data: context.session, signIn: context.signIn, signOut: context.signOut }
 }
