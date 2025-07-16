@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { getServerSession } from "@/lib/auth"
+import { MobileLink } from "@/components/mobile-link"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -36,6 +37,7 @@ export default async function RootLayout({
             {children}
             <Toaster />
             <SpeedInsights />
+            <MobileLink />
           </AuthProvider>
         </ThemeProvider>
       </body>
