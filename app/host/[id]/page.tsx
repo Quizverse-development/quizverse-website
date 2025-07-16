@@ -83,18 +83,22 @@ export default function HostPage() {
   }, [params.id])
 
   useEffect(() => {
-    let timer: NodeJS.Timeout | null = null;
+    // Fixed timer implementation
+    if (!currentQuestion || !game || game.status !== 'playing' || showResults) return;
     
-    if (timeLeft > 0 && !showResults && currentQuestion && game?.status === 'playing') {
-      timer = setTimeout(() => setTimeLeft(prev => prev - 1), 1000);
-    } else if (timeLeft === 0 && !showResults && currentQuestion) {
-      setShowResults(true);
-    }
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          setShowResults(true);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
     
-    return () => {
-      if (timer) clearTimeout(timer);
-    };
-  }, [timeLeft, showResults, currentQuestion, game?.status])
+    return () => clearInterval(timer);
+  }, [currentQuestion, game, showResults])
 
   const nextQuestion = async () => {
     try {
@@ -214,20 +218,28 @@ export default function HostPage() {
                 <CardTitle className="text-2xl sm:text-3xl text-center text-gray-900">
                   {currentQuestion.question}
                 </CardTitle>
+                {currentQuestion.question.includes('flag') && (
+                  <div className="mt-4 text-center">
+                    <div className="p-4 bg-gray-50 rounded-lg inline-block">
+                      <p className="text-sm text-gray-600">Flag of {currentQuestion.options[currentQuestion.correctAnswer]}</p>
+                    </div>
+                  </div>
+                )}
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                   {currentQuestion.options.map((option, index) => (
-                    <div
+                    <button
                       key={index}
-                      className={`p-4 rounded-lg border-2 text-center font-medium ${
+                      onClick={() => !showResults && nextQuestion()}
+                      className={`p-4 rounded-lg border-2 text-center font-medium cursor-pointer hover:bg-gray-100 transition-colors ${
                         showResults && index === currentQuestion.correctAnswer
                           ? 'bg-green-100 border-green-400 text-green-800'
                           : 'bg-gray-50 border-gray-200 text-gray-700'
                       }`}
                     >
                       {option}
-                    </div>
+                    </button>
                   ))}
                 </div>
                 
@@ -272,8 +284,8 @@ export default function HostPage() {
                           <span className="text-lg">{player.animal}</span>
                           <span className="text-sm font-medium truncate">{player.username}</span>
                         </div>
-                        <Badge variant="secondary" className="text-xs">
-                          {player.score}
+                        <Badge variant="secondary" className="text-xs px-2 py-1">
+                          {player.score} pts
                         </Badge>
                       </div>
                     ))

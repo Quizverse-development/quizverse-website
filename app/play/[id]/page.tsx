@@ -99,18 +99,22 @@ export default function PlayPage() {
   }, [params.id, currentQuestion])
 
   useEffect(() => {
-    let timer: NodeJS.Timeout | null = null;
+    // Fixed timer implementation
+    if (!currentQuestion || !game || game.status !== 'playing' || answerSubmitted) return;
     
-    if (timeLeft > 0 && !answerSubmitted && currentQuestion && game?.status === 'playing') {
-      timer = setTimeout(() => setTimeLeft(prev => prev - 1), 1000);
-    } else if (timeLeft === 0 && !answerSubmitted && currentQuestion) {
-      handleSubmitAnswer();
-    }
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          handleSubmitAnswer();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
     
-    return () => {
-      if (timer) clearTimeout(timer);
-    };
-  }, [timeLeft, answerSubmitted, currentQuestion, game?.status])
+    return () => clearInterval(timer);
+  }, [currentQuestion, game, answerSubmitted])
 
   const handleSubmitAnswer = async () => {
     if (!currentQuestion || !game || !player || answerSubmitted) return
@@ -134,6 +138,12 @@ export default function PlayPage() {
           timeMs: (currentQuestion.timeLimit - timeLeft) * 1000
         })
       })
+      
+      // Refresh leaderboard after submitting answer
+      fetch(`/api/games/${params.id}/leaderboard`)
+        .then(res => res.json())
+        .then(data => setLeaderboard(data.leaderboard || []))
+        
     } catch (error) {
       console.error('Failed to submit answer:', error)
     }
@@ -181,7 +191,7 @@ export default function PlayPage() {
                       <span className="text-2xl">{p.animal}</span>
                       <span className="font-medium">{p.username}</span>
                     </div>
-                    <Badge variant="secondary">{p.score} pts</Badge>
+                    <Badge variant="secondary" className="px-2 py-1">{p.score} pts</Badge>
                   </div>
                 ))}
               </div>
@@ -275,6 +285,14 @@ export default function PlayPage() {
               {currentQuestion.question}
             </h1>
             
+            {currentQuestion.question.includes('flag') && (
+              <div className="mb-6 text-center">
+                <div className="p-4 bg-gray-50 rounded-lg inline-block">
+                  <p className="text-sm text-gray-600">Choose the correct country for this flag</p>
+                </div>
+              </div>
+            )}
+            
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {currentQuestion.options.map((option, index) => (
                 <Button
@@ -324,6 +342,30 @@ export default function PlayPage() {
             )}
           </CardContent>
         </Card>
+        
+        {/* Mini Leaderboard */}
+        {leaderboard.length > 0 && (
+          <Card className="w-full">
+            <CardContent className="p-4">
+              <h3 className="font-medium mb-2 flex items-center">
+                <Trophy className="h-4 w-4 text-yellow-500 mr-1" />
+                Top 3 Players
+              </h3>
+              <div className="space-y-2">
+                {leaderboard.slice(0, 3).map((p, index) => (
+                  <div key={p.id} className="flex justify-between items-center">
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold">#{index + 1}</span>
+                      <span>{p.animal}</span>
+                      <span>{p.username}</span>
+                    </div>
+                    <Badge variant="secondary">{p.score} pts</Badge>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   )
