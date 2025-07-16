@@ -18,6 +18,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
   useEffect(() => {
     // Clear any existing session on app load
+    localStorage.removeItem("user-session")
     localStorage.removeItem("demo-session")
     setSession(null)
   }, [])
@@ -25,12 +26,12 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   const signIn = (user: any) => {
     const newSession = { user }
     setSession(newSession)
-    localStorage.setItem("demo-session", JSON.stringify(newSession))
+    localStorage.setItem("user-session", JSON.stringify(newSession))
   }
 
   const signOut = () => {
     setSession(null)
-    localStorage.removeItem("demo-session")
+    localStorage.removeItem("user-session")
   }
 
   return (

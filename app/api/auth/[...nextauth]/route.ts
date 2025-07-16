@@ -1,3 +1,9 @@
-import NextAuth from "@/lib/auth"
+import { NextResponse } from "next/server"
 
-export { NextAuth as GET, NextAuth as POST }
+export async function GET() {
+  return NextResponse.json({ message: "Custom auth system - no NextAuth needed" })
+}
+
+export async function POST() {
+  return NextResponse.json({ message: "Custom auth system - no NextAuth needed" })
+}
