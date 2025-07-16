@@ -1,42 +1,21 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getServerSession } from "@/lib/auth"
-import { db } from "@/lib/db"
+import { joinGame } from "@/lib/game-store"
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession()
+    const { code, username, animal } = await request.json()
     
-    if (!session?.user) {
-      return NextResponse.json({ error: "Authentication required" }, { status: 401 })
+    if (!code || !username || !animal) {
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 
-    const { gameCode } = await request.json()
-    const gameSession = db.getGameSession(gameCode)
+    const result = joinGame(code, username, animal)
     
-    if (!gameSession) {
-      return NextResponse.json({ error: "Game not found" }, { status: 404 })
+    if (!result.success) {
+      return NextResponse.json({ error: result.error }, { status: 400 })
     }
 
-    const player = {
-      id: session.user.id,
-      name: session.user.name || "Anonymous",
-      email: session.user.email!,
-      score: 0,
-      answers: [],
-      joinedAt: new Date(),
-      isReady: false
-    }
-
-    const existingPlayerIndex = gameSession.players.findIndex(p => p.id === player.id)
-    if (existingPlayerIndex >= 0) {
-      gameSession.players[existingPlayerIndex] = player
-    } else {
-      gameSession.players.push(player)
-    }
-
-    db.updateGameSession(gameSession.id, { players: gameSession.players })
-
-    return NextResponse.json({ success: true, gameSession })
+    return NextResponse.json({ game: result.game, player: result.player })
   } catch (error) {
     return NextResponse.json({ error: "Failed to join game" }, { status: 500 })
   }
