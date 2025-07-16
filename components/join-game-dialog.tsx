@@ -38,9 +38,14 @@ export function JoinGameDialog() {
       const data = await response.json()
       
       if (response.ok) {
-        // Store player info in localStorage
-        localStorage.setItem('player', JSON.stringify(data.player))
-        router.push(`/play/${data.game.id}`)
+        // Store player info in localStorage with error handling
+        try {
+          localStorage.setItem('player', JSON.stringify(data.player))
+          router.push(`/play/${data.game.id}`)
+        } catch (error) {
+          console.error('Failed to save player data:', error)
+          alert('Failed to save player data. Please try again.')
+        }
       } else {
         setError(data.error || "Failed to join game")
       }

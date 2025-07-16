@@ -46,10 +46,16 @@ export default function PlayPage() {
   const [player, setPlayer] = useState<any>(null)
 
   useEffect(() => {
-    // Get player info from localStorage
-    const savedPlayer = localStorage.getItem('player')
-    if (savedPlayer) {
-      setPlayer(JSON.parse(savedPlayer))
+    // Get player info from localStorage with error handling
+    try {
+      const savedPlayer = localStorage.getItem('player')
+      if (savedPlayer) {
+        const parsedPlayer = JSON.parse(savedPlayer)
+        setPlayer(parsedPlayer)
+      }
+    } catch (error) {
+      console.error('Error loading player data:', error)
+      localStorage.removeItem('player')
     }
 
     const fetchGameData = async () => {
@@ -100,7 +106,7 @@ export default function PlayPage() {
 
   useEffect(() => {
     // Completely new timer implementation
-    if (!currentQuestion || !game || game.status !== 'playing' || answerSubmitted) return;
+    if (!currentQuestion || !game || game.status !== 'playing') return;
     
     // Set initial time from question
     setTimeLeft(currentQuestion.timeLimit);
@@ -116,24 +122,27 @@ export default function PlayPage() {
       if (remaining <= 0) {
         clearInterval(timer);
         setTimeLeft(0);
-        handleSubmitAnswer();
+        if (!answerSubmitted && selectedAnswer) {
+          handleSubmitAnswer();
+        }
       } else {
         setTimeLeft(remaining);
       }
     }, 250); // Update more frequently for smoother countdown
     
     return () => clearInterval(timer);
-  }, [currentQuestion?.id, game?.status, answerSubmitted]) // Only depend on these specific properties
+  }, [currentQuestion?.id, game?.status]) // Only depend on these specific properties
 
   const handleSubmitAnswer = async () => {
-    if (!currentQuestion || !game || !player || answerSubmitted) return
+    if (!currentQuestion || !game || !player) return
     
-    setAnswerSubmitted(true)
+    // Allow answering until timer runs out
     
     // Check if answer is correct
     const correct = selectedAnswer === currentQuestion.options[currentQuestion.correctAnswer]
     setIsCorrect(correct)
     setShowResults(true)
+    setAnswerSubmitted(true)
     
     // Submit answer to API
     try {
@@ -296,8 +305,13 @@ export default function PlayPage() {
             
             {currentQuestion.question.includes('flag') && (
               <div className="mb-6 text-center">
-                <div className="p-4 bg-gray-50 rounded-lg inline-block">
-                  <p className="text-sm text-gray-600">Choose the correct country for this flag</p>
+                <div className="p-4 bg-gray-50 rounded-lg inline-block shadow-md">
+                  <img 
+                    src={`https://flagcdn.com/w320/${currentQuestion.options[currentQuestion.correctAnswer].toLowerCase().substring(0,2)}.png`} 
+                    alt="Flag"
+                    className="max-h-32 mx-auto mb-2 border border-gray-200" 
+                  />
+                  <p className="text-sm text-gray-600 font-medium">Choose the correct country for this flag</p>
                 </div>
               </div>
             )}
@@ -316,18 +330,23 @@ export default function PlayPage() {
                       ? 'bg-purple-600 hover:bg-purple-700 text-white'
                       : 'hover:bg-gray-50'
                   }`}
-                  onClick={() => !answerSubmitted && setSelectedAnswer(option)}
-                  disabled={answerSubmitted}
+                  onClick={() => setSelectedAnswer(option)}
+                  disabled={timeLeft === 0}
                 >
                   {option}
                 </Button>
               ))}
             </div>
             
-            {selectedAnswer && !answerSubmitted && (
+            {selectedAnswer && (
               <div className="text-center mt-6">
-                <Button onClick={handleSubmitAnswer} size="lg" className="bg-purple-600 hover:bg-purple-700">
-                  Submit Answer
+                <Button 
+                  onClick={handleSubmitAnswer} 
+                  size="lg" 
+                  className="bg-purple-600 hover:bg-purple-700 transition-all"
+                  disabled={timeLeft === 0}
+                >
+                  {answerSubmitted ? 'Change Answer' : 'Submit Answer'}
                 </Button>
               </div>
             )}

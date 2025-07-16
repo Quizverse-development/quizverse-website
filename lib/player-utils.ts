@@ -37,21 +37,3 @@ export function clearPlayer() {
     console.error('Failed to clear player data:', error);
   }
 }
-
-/**
- * Verifies if a player exists in a game
- */
-export async function verifyPlayerInGame(gameId: string, playerId: string) {
-  try {
-    const response = await fetch(`/api/games/${gameId}`);
-    const data = await response.json();
-    
-    if (data.game) {
-      return data.game.players.some((p: any) => p.id === playerId);
-    }
-  } catch (error) {
-    console.error('Failed to verify player:', error);
-  }
-  
-  return false;
-}

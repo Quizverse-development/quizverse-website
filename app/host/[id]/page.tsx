@@ -230,7 +230,12 @@ export default function HostPage() {
                 {currentQuestion.question.includes('flag') && (
                   <div className="mt-4 text-center">
                     <div className="p-4 bg-gray-50 rounded-lg inline-block">
-                      <p className="text-sm text-gray-600">Flag of {currentQuestion.options[currentQuestion.correctAnswer]}</p>
+                      <img 
+                        src={`https://flagcdn.com/w320/${currentQuestion.options[currentQuestion.correctAnswer].toLowerCase().substring(0,2)}.png`} 
+                        alt={`Flag of ${currentQuestion.options[currentQuestion.correctAnswer]}`}
+                        className="max-h-32 mx-auto mb-2 border border-gray-200 shadow-sm" 
+                      />
+                      <p className="text-sm text-gray-600 font-medium">Flag of {currentQuestion.options[currentQuestion.correctAnswer]}</p>
                     </div>
                   </div>
                 )}
