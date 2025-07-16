@@ -63,7 +63,7 @@ export default function LobbyPage() {
         method: 'POST'
       })
       if (response.ok) {
-        router.push(`/game/${params.id}`)
+        router.push(`/host/${params.id}`)
       }
     } catch (error) {
       console.error('Failed to start game:', error)

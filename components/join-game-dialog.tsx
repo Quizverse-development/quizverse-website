@@ -40,7 +40,7 @@ export function JoinGameDialog() {
       if (response.ok) {
         // Store player info in localStorage
         localStorage.setItem('player', JSON.stringify(data.player))
-        router.push(`/game/${data.game.id}`)
+        router.push(`/play/${data.game.id}`)
       } else {
         setError(data.error || "Failed to join game")
       }

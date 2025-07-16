@@ -253,8 +253,37 @@ export function startGame(gameId: string): boolean {
   const game = games.get(gameId)
   if (!game || game.status !== 'lobby') return false
   game.status = 'playing'
+  game.currentQuestion = 1
   games.set(gameId, game)
   return true
+}
+
+export function getCurrentQuestion(gameId: string): Question | null {
+  const game = games.get(gameId)
+  if (!game) return null
+  
+  const quiz = PREMADE_QUIZZES.find(q => q.id === game.quizId)
+  if (!quiz) return null
+  
+  return quiz.questions.find(q => q.id === game.currentQuestion) || null
+}
+
+export function nextQuestion(gameId: string): boolean {
+  const game = games.get(gameId)
+  if (!game) return false
+  
+  const quiz = PREMADE_QUIZZES.find(q => q.id === game.quizId)
+  if (!quiz) return false
+  
+  if (game.currentQuestion < quiz.questions.length) {
+    game.currentQuestion++
+    games.set(gameId, game)
+    return true
+  } else {
+    game.status = 'finished'
+    games.set(gameId, game)
+    return false
+  }
 }
 
 export function submitAnswer(gameId: string, playerId: string, questionId: number, answer: string, timeMs: number): boolean {
