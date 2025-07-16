@@ -12,14 +12,23 @@ export interface Session {
 
 const ADMIN_EMAIL = "ben.steels@outlook.com"
 
+// Admin users
+const ADMIN_USERS = [
+  { id: "1", email: "admin@quizverse.com", name: "Admin One", password: "bensteels123", isAdmin: true },
+  { id: "2", email: "admin2@quizverse.com", name: "Admin Two", password: "ethan123789", isAdmin: true },
+]
+
 // Demo users
 const DEMO_USERS = [
-  { id: "2", email: "teacher@school.com", name: "Teacher Demo", isAdmin: false },
-  { id: "3", email: "student@school.com", name: "Student Demo", isAdmin: false },
+  { id: "3", email: "teacher@school.com", name: "Teacher Demo", isAdmin: false },
+  { id: "4", email: "student@school.com", name: "Student Demo", isAdmin: false },
 ]
 
 export async function getServerSession(): Promise<Session | null> {
-  return null
+  // For demo purposes, return admin session
+  return {
+    user: ADMIN_USERS[0]
+  }
 }
 
 // Get user stats for admin dashboard

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { 
   BarChart, 
   Bar, 
@@ -19,34 +20,13 @@ import {
 import { 
   Users, 
   Clock, 
-  Calendar, 
   Award, 
   BarChart3, 
-  PieChart as PieChartIcon
+  PieChart as PieChartIcon,
+  Settings,
+  Shield,
+  UserPlus
 } from "lucide-react"
-
-// Mock data for the admin dashboard
-const userStats = {
-  totalUsers: 256,
-  activeUsers: 124,
-  newUsersToday: 18,
-  totalGamesPlayed: 1893,
-  averageGameTime: "8.5 min",
-  totalPlayTime: "267 hours"
-}
-
-const topUsers = [
-  { id: 1, name: "Sarah Johnson", games: 87, hours: 12.5, animal: "🦊" },
-  { id: 2, name: "Michael Chen", games: 76, hours: 10.2, animal: "🐼" },
-  { id: 3, name: "Emma Wilson", games: 65, hours: 9.8, animal: "🦁" },
-  { id: 4, name: "James Smith", games: 58, hours: 8.3, animal: "🐵" },
-  { id: 5, name: "Olivia Brown", games: 52, hours: 7.1, animal: "🦄" },
-  { id: 6, name: "Noah Davis", games: 49, hours: 6.9, animal: "🐯" },
-  { id: 7, name: "Sophia Martinez", games: 45, hours: 6.5, animal: "🐰" },
-  { id: 8, name: "Liam Johnson", games: 42, hours: 6.2, animal: "🐺" },
-  { id: 9, name: "Ava Thompson", games: 38, hours: 5.8, animal: "🦊" },
-  { id: 10, name: "William Garcia", games: 36, hours: 5.5, animal: "🐻" }
-]
 
 const weeklyData = [
   { name: "Mon", games: 45 },
@@ -64,13 +44,33 @@ const quizPopularity = [
   { name: "History", value: 20 },
   { name: "Animals", value: 15 },
   { name: "Movies", value: 30 },
-  { name: "Food", value: 18 }
+  { name: "Food", value: 18 },
+  { name: "World Flags", value: 40 }
 ]
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d', '#a569bd'];
 
-export function AdminDashboard() {
+interface AdminDashboardProps {
+  stats: {
+    totalUsers: number;
+    activeUsers: number;
+    newUsersToday: number;
+    totalGamesPlayed: number;
+    averageGameTime: string;
+    totalPlayTime: string;
+  };
+  topUsers: Array<{
+    id: number;
+    name: string;
+    games: number;
+    hours: number;
+    animal: string;
+  }>;
+}
+
+export function AdminDashboard({ stats, topUsers }: AdminDashboardProps) {
   const [mounted, setMounted] = useState(false)
+  const [activeTab, setActiveTab] = useState("users")
 
   useEffect(() => {
     setMounted(true)
@@ -82,10 +82,22 @@ export function AdminDashboard() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm">
+            <Shield className="mr-2 h-4 w-4" />
+            Access Control
+          </Button>
+          <Button variant="outline" size="sm">
+            <Settings className="mr-2 h-4 w-4" />
+            Settings
+          </Button>
+        </div>
+      </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <Card>
+        <Card className="shadow-sm hover:shadow-md transition-shadow">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center">
               <Users className="mr-2 h-4 w-4 text-blue-500" />
@@ -93,14 +105,14 @@ export function AdminDashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{userStats.totalUsers}</div>
+            <div className="text-2xl font-bold">{stats.totalUsers}</div>
             <p className="text-xs text-muted-foreground">
-              {userStats.activeUsers} active in last 7 days
+              {stats.activeUsers} active in last 7 days
             </p>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="shadow-sm hover:shadow-md transition-shadow">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center">
               <Award className="mr-2 h-4 w-4 text-yellow-500" />
@@ -108,14 +120,14 @@ export function AdminDashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{userStats.totalGamesPlayed}</div>
+            <div className="text-2xl font-bold">{stats.totalGamesPlayed}</div>
             <p className="text-xs text-muted-foreground">
-              {userStats.newUsersToday} new games today
+              {stats.newUsersToday} new games today
             </p>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="shadow-sm hover:shadow-md transition-shadow">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center">
               <Clock className="mr-2 h-4 w-4 text-green-500" />
@@ -123,15 +135,15 @@ export function AdminDashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{userStats.totalPlayTime}</div>
+            <div className="text-2xl font-bold">{stats.totalPlayTime}</div>
             <p className="text-xs text-muted-foreground">
-              Avg. {userStats.averageGameTime} per game
+              Avg. {stats.averageGameTime} per game
             </p>
           </CardContent>
         </Card>
       </div>
       
-      <Tabs defaultValue="users">
+      <Tabs defaultValue="users" value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="users">Top Users</TabsTrigger>
           <TabsTrigger value="activity">Activity</TabsTrigger>
@@ -139,16 +151,20 @@ export function AdminDashboard() {
         </TabsList>
         
         <TabsContent value="users" className="space-y-4 mt-4">
-          <Card>
-            <CardHeader>
+          <Card className="shadow-sm">
+            <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Top Players</CardTitle>
+              <Button size="sm" variant="outline">
+                <UserPlus className="mr-2 h-4 w-4" />
+                Add User
+              </Button>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
                 {topUsers.map((user, index) => (
                   <div 
                     key={user.id} 
-                    className="flex items-center justify-between p-3 rounded-lg bg-white border border-gray-100"
+                    className="flex items-center justify-between p-3 rounded-lg bg-white border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
                   >
                     <div className="flex items-center gap-3">
                       <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 text-blue-700 font-bold">
@@ -169,7 +185,7 @@ export function AdminDashboard() {
         </TabsContent>
         
         <TabsContent value="activity" className="mt-4">
-          <Card>
+          <Card className="shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Weekly Activity</CardTitle>
               <BarChart3 className="h-4 w-4 text-gray-500" />
@@ -190,7 +206,7 @@ export function AdminDashboard() {
                     <XAxis dataKey="name" />
                     <YAxis />
                     <Tooltip />
-                    <Bar dataKey="games" fill="#8884d8" />
+                    <Bar dataKey="games" fill="#3b82f6" />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -199,7 +215,7 @@ export function AdminDashboard() {
         </TabsContent>
         
         <TabsContent value="quizzes" className="mt-4">
-          <Card>
+          <Card className="shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Quiz Popularity</CardTitle>
               <PieChartIcon className="h-4 w-4 text-gray-500" />
