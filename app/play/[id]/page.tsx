@@ -99,12 +99,17 @@ export default function PlayPage() {
   }, [params.id, currentQuestion])
 
   useEffect(() => {
+    let timer: NodeJS.Timeout | null = null;
+    
     if (timeLeft > 0 && !answerSubmitted && currentQuestion && game?.status === 'playing') {
-      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000)
-      return () => clearTimeout(timer)
+      timer = setTimeout(() => setTimeLeft(prev => prev - 1), 1000);
     } else if (timeLeft === 0 && !answerSubmitted && currentQuestion) {
-      handleSubmitAnswer()
+      handleSubmitAnswer();
     }
+    
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
   }, [timeLeft, answerSubmitted, currentQuestion, game?.status])
 
   const handleSubmitAnswer = async () => {

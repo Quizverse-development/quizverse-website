@@ -83,12 +83,17 @@ export default function HostPage() {
   }, [params.id])
 
   useEffect(() => {
+    let timer: NodeJS.Timeout | null = null;
+    
     if (timeLeft > 0 && !showResults && currentQuestion && game?.status === 'playing') {
-      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000)
-      return () => clearTimeout(timer)
+      timer = setTimeout(() => setTimeLeft(prev => prev - 1), 1000);
     } else if (timeLeft === 0 && !showResults && currentQuestion) {
-      setShowResults(true)
+      setShowResults(true);
     }
+    
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
   }, [timeLeft, showResults, currentQuestion, game?.status])
 
   const nextQuestion = async () => {
@@ -249,7 +254,10 @@ export default function HostPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-2 max-h-96 overflow-y-auto">
-                  {leaderboard.slice(0, 10).map((player, index) => (
+                  {leaderboard.length === 0 ? (
+                    <p className="text-center text-gray-500 py-4">No players have scored yet</p>
+                  ) : (
+                    leaderboard.slice(0, 10).map((player, index) => (
                     <div
                       key={player.id}
                       className={`flex items-center justify-between p-3 rounded-lg ${
@@ -269,6 +277,19 @@ export default function HostPage() {
                       </Badge>
                     </div>
                   ))}
+                </div>
+                <div className="mt-4 text-center">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => {
+                      fetch(`/api/games/${params.id}/leaderboard`)
+                        .then(res => res.json())
+                        .then(data => setLeaderboard(data.leaderboard || []))
+                    }}
+                  >
+                    Refresh Leaderboard
+                  </Button>
                 </div>
               </CardContent>
             </Card>

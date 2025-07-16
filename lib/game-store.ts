@@ -102,16 +102,21 @@ export const PREMADE_QUIZZES: Quiz[] = [
     description: 'Test your knowledge of country flags',
     category: 'Geography',
     questions: [
-      { id: 1, question: 'Which country has this flag? 🇺🇸', options: ['Canada', 'United States', 'Mexico', 'Brazil'], correctAnswer: 1, timeLimit: 20 },
-      { id: 2, question: 'Which country has this flag? 🇫🇷', options: ['Italy', 'Spain', 'France', 'Germany'], correctAnswer: 2, timeLimit: 20 },
-      { id: 3, question: 'Which country has this flag? 🇯🇵', options: ['China', 'Japan', 'South Korea', 'Thailand'], correctAnswer: 1, timeLimit: 20 },
-      { id: 4, question: 'Which country has this flag? 🇬🇧', options: ['Ireland', 'Scotland', 'United Kingdom', 'Wales'], correctAnswer: 2, timeLimit: 20 },
-      { id: 5, question: 'Which country has this flag? 🇨🇦', options: ['Canada', 'United States', 'Australia', 'New Zealand'], correctAnswer: 0, timeLimit: 20 },
-      { id: 6, question: 'Which country has this flag? 🇩🇪', options: ['Austria', 'Germany', 'Belgium', 'Netherlands'], correctAnswer: 1, timeLimit: 20 },
-      { id: 7, question: 'Which country has this flag? 🇮🇹', options: ['Italy', 'Ireland', 'Mexico', 'Hungary'], correctAnswer: 0, timeLimit: 20 },
-      { id: 8, question: 'Which country has this flag? 🇪🇸', options: ['Portugal', 'Spain', 'Colombia', 'Venezuela'], correctAnswer: 1, timeLimit: 20 },
-      { id: 9, question: 'Which country has this flag? 🇦🇺', options: ['New Zealand', 'Australia', 'Fiji', 'Samoa'], correctAnswer: 1, timeLimit: 20 },
-      { id: 10, question: 'Which country has this flag? 🇧🇷', options: ['Argentina', 'Brazil', 'Uruguay', 'Paraguay'], correctAnswer: 1, timeLimit: 20 }
+      { id: 1, question: 'Which country has a flag with red and white stripes and white stars on a blue rectangle?', options: ['Canada', 'United States', 'Mexico', 'Brazil'], correctAnswer: 1, timeLimit: 20 },
+      { id: 2, question: 'Which country has a flag with vertical blue, white, and red stripes?', options: ['Italy', 'Spain', 'France', 'Germany'], correctAnswer: 2, timeLimit: 20 },
+      { id: 3, question: 'Which country has a white flag with a red circle in the center?', options: ['China', 'Japan', 'South Korea', 'Thailand'], correctAnswer: 1, timeLimit: 20 },
+      { id: 4, question: 'Which country has a flag with overlapping crosses of St. George, St. Andrew, and St. Patrick?', options: ['Ireland', 'Scotland', 'United Kingdom', 'Wales'], correctAnswer: 2, timeLimit: 20 },
+      { id: 5, question: 'Which country has a red and white flag with a maple leaf in the center?', options: ['Canada', 'United States', 'Australia', 'New Zealand'], correctAnswer: 0, timeLimit: 20 },
+      { id: 6, question: 'Which country has a flag with horizontal black, red, and gold stripes?', options: ['Austria', 'Germany', 'Belgium', 'Netherlands'], correctAnswer: 1, timeLimit: 20 },
+      { id: 7, question: 'Which country has a flag with vertical green, white, and red stripes?', options: ['Italy', 'Ireland', 'Mexico', 'Hungary'], correctAnswer: 0, timeLimit: 20 },
+      { id: 8, question: 'Which country has a flag with horizontal red and yellow stripes and a coat of arms?', options: ['Portugal', 'Spain', 'Colombia', 'Venezuela'], correctAnswer: 1, timeLimit: 20 },
+      { id: 9, question: 'Which country has a blue flag with the Union Jack in the corner and stars?', options: ['New Zealand', 'Australia', 'Fiji', 'Samoa'], correctAnswer: 1, timeLimit: 20 },
+      { id: 10, question: 'Which country has a green flag with a yellow diamond and blue circle?', options: ['Argentina', 'Brazil', 'Uruguay', 'Paraguay'], correctAnswer: 1, timeLimit: 20 },
+      { id: 11, question: 'Which country has a flag with a white cross on a red background?', options: ['Denmark', 'Switzerland', 'Norway', 'Finland'], correctAnswer: 1, timeLimit: 20 },
+      { id: 12, question: 'Which country has a flag with a red circle on a white background?', options: ['Bangladesh', 'Japan', 'Turkey', 'Tunisia'], correctAnswer: 0, timeLimit: 20 },
+      { id: 13, question: 'Which country has a flag with a yellow cross on a blue background?', options: ['Finland', 'Sweden', 'Norway', 'Iceland'], correctAnswer: 1, timeLimit: 20 },
+      { id: 14, question: 'Which country has a flag with horizontal red, white, and blue stripes?', options: ['France', 'Netherlands', 'Luxembourg', 'Russia'], correctAnswer: 1, timeLimit: 20 },
+      { id: 15, question: 'Which country has a flag with a red maple leaf between two red vertical bars?', options: ['Canada', 'Peru', 'Austria', 'Lebanon'], correctAnswer: 0, timeLimit: 20 }
     ]
   },
   {
@@ -129,7 +134,12 @@ export const PREMADE_QUIZZES: Quiz[] = [
       { id: 7, question: 'Which ocean is the largest?', options: ['Atlantic', 'Pacific', 'Indian', 'Arctic'], correctAnswer: 1, timeLimit: 20 },
       { id: 8, question: 'What is the highest mountain in Africa?', options: ['Mount Kenya', 'Mount Kilimanjaro', 'Mount Elgon', 'Drakensberg'], correctAnswer: 1, timeLimit: 20 },
       { id: 9, question: 'Which country has the most time zones?', options: ['Russia', 'United States', 'China', 'France'], correctAnswer: 3, timeLimit: 20 },
-      { id: 10, question: 'What is the deepest ocean trench?', options: ['Puerto Rico Trench', 'Mariana Trench', 'Java Trench', 'Peru-Chile Trench'], correctAnswer: 1, timeLimit: 20 }
+      { id: 10, question: 'What is the deepest ocean trench?', options: ['Puerto Rico Trench', 'Mariana Trench', 'Java Trench', 'Peru-Chile Trench'], correctAnswer: 1, timeLimit: 20 },
+      { id: 11, question: 'Which country is both in Europe and Asia?', options: ['Russia', 'Turkey', 'Kazakhstan', 'All of these'], correctAnswer: 3, timeLimit: 20 },
+      { id: 12, question: 'What is the largest island in the world?', options: ['Madagascar', 'Greenland', 'New Guinea', 'Borneo'], correctAnswer: 1, timeLimit: 20 },
+      { id: 13, question: 'Which of these cities is NOT a capital?', options: ['Sydney', 'Madrid', 'Cairo', 'Bangkok'], correctAnswer: 0, timeLimit: 20 },
+      { id: 14, question: 'Which country has the largest population?', options: ['India', 'China', 'United States', 'Indonesia'], correctAnswer: 1, timeLimit: 20 },
+      { id: 15, question: 'What is the capital of Brazil?', options: ['Rio de Janeiro', 'São Paulo', 'Brasília', 'Salvador'], correctAnswer: 2, timeLimit: 20 }
     ]
   },
   {
@@ -302,7 +312,7 @@ export function submitAnswer(gameId: string, playerId: string, questionId: numbe
   const correct = question.options[question.correctAnswer] === answer
   if (correct) {
     // Score based on speed (max 1000 points, min 100 points)
-    const speedBonus = Math.max(100, 1000 - (timeMs / question.timeLimit) * 900)
+    const speedBonus = Math.max(100, 1000 - (timeMs / (question.timeLimit * 1000)) * 900)
     player.score += Math.round(speedBonus)
   }
 
