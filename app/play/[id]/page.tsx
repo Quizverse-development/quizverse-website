@@ -308,8 +308,8 @@ export default function PlayPage() {
               <div className="mb-6 text-center">
                 <div className="p-4 bg-gray-50 rounded-lg inline-block shadow-md">
                   <div className="h-32 w-full flex items-center justify-center mb-2">
-                    <div className="bg-gray-100 p-2 rounded-md border border-gray-300 inline-flex items-center justify-center">
-                      <span className="text-5xl">{getFlagEmoji(currentQuestion.options[currentQuestion.correctAnswer])}</span>
+                    <div className="bg-gray-100 p-6 rounded-md border border-gray-300 inline-flex items-center justify-center shadow-md">
+                      <span className="text-8xl">{getFlagEmoji(currentQuestion.options[currentQuestion.correctAnswer])}</span>
                     </div>
                   </div>
                   <p className="text-sm text-gray-600 font-medium">Choose the correct country for this flag</p>
