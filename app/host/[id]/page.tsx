@@ -6,8 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
-import { Trophy, Users, Clock, ArrowRight, RotateCcw } from "lucide-react"
+import { Trophy, Users, Clock, ArrowRight, RotateCcw, Timer } from "lucide-react"
 import { getFlagUrl, getFlagEmoji } from "@/lib/flag-utils"
+import { formatRemainingTime } from "@/lib/game-utils"
 
 interface Question {
   id: number
@@ -41,6 +42,7 @@ export default function HostPage() {
   const [timeLeft, setTimeLeft] = useState(20)
   const [showResults, setShowResults] = useState(false)
   const [gameFinished, setGameFinished] = useState(false)
+  const [gameTimeRemaining, setGameTimeRemaining] = useState<string>("∞")
 
   useEffect(() => {
     const fetchGameData = async () => {
@@ -54,6 +56,11 @@ export default function HostPage() {
           
           if (gameData.game.status === 'finished') {
             setGameFinished(true)
+          }
+          
+          // Update game time remaining
+          if (gameData.game.endTime) {
+            setGameTimeRemaining(formatRemainingTime(new Date(gameData.game.endTime)))
           }
         }
 
@@ -213,9 +220,16 @@ export default function HostPage() {
             </Badge>
           </div>
           
-          <div className="flex items-center gap-2 bg-white rounded-lg px-4 py-2 shadow-md">
-            <Clock className="h-5 w-5 text-red-500" />
-            <span className="text-xl font-bold text-red-500">{timeLeft}s</span>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 bg-white rounded-lg px-4 py-2 shadow-md">
+              <Clock className="h-5 w-5 text-red-500" />
+              <span className="text-xl font-bold text-red-500">{timeLeft}s</span>
+            </div>
+            
+            <div className="flex items-center gap-2 bg-white rounded-lg px-4 py-2 shadow-md">
+              <Timer className="h-5 w-5 text-blue-500" />
+              <span className="text-xl font-bold text-blue-500">{gameTimeRemaining}</span>
+            </div>
           </div>
         </div>
 

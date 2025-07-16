@@ -16,6 +16,8 @@ export interface Game {
   players: Player[]
   currentQuestion: number
   createdAt: Date
+  timeLimit?: number // Game time limit in minutes
+  endTime?: Date // When the game will end
 }
 
 export interface Quiz {
@@ -214,7 +216,7 @@ export function generateGameCode(): string {
   return Math.random().toString(36).substring(2, 8).toUpperCase()
 }
 
-export function createGame(hostId: string, quizId: string): Game {
+export function createGame(hostId: string, quizId: string, timeLimit?: number): Game {
   const game: Game = {
     id: Math.random().toString(36).substring(2),
     hostId,
@@ -223,7 +225,8 @@ export function createGame(hostId: string, quizId: string): Game {
     status: 'lobby',
     players: [],
     currentQuestion: 0,
-    createdAt: new Date()
+    createdAt: new Date(),
+    timeLimit: timeLimit || 10 // Default 10 minutes if not specified
   }
   games.set(game.id, game)
   return game
@@ -264,6 +267,14 @@ export function startGame(gameId: string): boolean {
   if (!game || game.status !== 'lobby') return false
   game.status = 'playing'
   game.currentQuestion = 1
+  
+  // Set end time based on time limit
+  if (game.timeLimit) {
+    const endTime = new Date()
+    endTime.setMinutes(endTime.getMinutes() + game.timeLimit)
+    game.endTime = endTime
+  }
+  
   games.set(gameId, game)
   return true
 }
@@ -278,22 +289,33 @@ export function getCurrentQuestion(gameId: string): Question | null {
   return quiz.questions.find(q => q.id === game.currentQuestion) || null
 }
 
+import { getAllQuizzes, hasGameReachedTimeLimit } from "./game-utils"
+
 export function nextQuestion(gameId: string): boolean {
   const game = games.get(gameId)
   if (!game) return false
   
-  const quiz = PREMADE_QUIZZES.find(q => q.id === game.quizId)
-  if (!quiz) return false
-  
-  if (game.currentQuestion < quiz.questions.length) {
-    game.currentQuestion++
-    games.set(gameId, game)
-    return true
-  } else {
+  // Check if game has reached time limit
+  if (hasGameReachedTimeLimit(game)) {
     game.status = 'finished'
     games.set(gameId, game)
     return false
   }
+  
+  // Find quiz in all available quizzes
+  const allQuizzes = getAllQuizzes()
+  const quiz = allQuizzes.find(q => q.id === game.quizId)
+  if (!quiz) return false
+  
+  // Loop back to first question if we've reached the end
+  if (game.currentQuestion >= quiz.questions.length) {
+    game.currentQuestion = 1
+  } else {
+    game.currentQuestion++
+  }
+  
+  games.set(gameId, game)
+  return true
 }
 
 export function submitAnswer(gameId: string, playerId: string, questionId: number, answer: string, timeMs: number): boolean {

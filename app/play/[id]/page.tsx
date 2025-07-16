@@ -4,17 +4,16 @@ import { useState, useEffect } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
-import { Clock, Users, Trophy, CheckCircle, XCircle } from "lucide-react"
-import { getFlagUrl, getFlagEmoji } from "@/lib/flag-utils"
+import { Timer, Users, Trophy, CheckCircle, XCircle } from "lucide-react"
+import { getFlagUrl } from "@/lib/flag-utils"
+import { formatRemainingTime } from "@/lib/game-utils"
 
 interface Question {
   id: number
   question: string
   options: string[]
   correctAnswer: number
-  timeLimit: number
 }
 
 interface Player {
@@ -30,21 +29,22 @@ interface Game {
   players: Player[]
   currentQuestion: number
   quizId: string
+  endTime?: string
 }
 
 export default function PlayPage() {
   const params = useParams()
   const router = useRouter()
   const [game, setGame] = useState<Game | null>(null)
-  const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null)
+  const [currentQuestion, setCurrentQuestion] = useState<any>(null)
   const [selectedAnswer, setSelectedAnswer] = useState<string>("")
-  const [timeLeft, setTimeLeft] = useState(20)
   const [showResults, setShowResults] = useState(false)
-  const [answerSubmitted, setAnswerSubmitted] = useState(false)
   const [isCorrect, setIsCorrect] = useState(false)
   const [gameFinished, setGameFinished] = useState(false)
   const [leaderboard, setLeaderboard] = useState<Player[]>([])
   const [player, setPlayer] = useState<any>(null)
+  const [gameTimeRemaining, setGameTimeRemaining] = useState<string>("∞")
+  const [redirectTimer, setRedirectTimer] = useState<number>(0)
 
   useEffect(() => {
     // Get player info from localStorage with error handling
@@ -74,7 +74,15 @@ export default function PlayPage() {
             const leaderResponse = await fetch(`/api/games/${params.id}/leaderboard`)
             const leaderData = await leaderResponse.json()
             setLeaderboard(leaderData.leaderboard || [])
+            
+            // Start redirect timer
+            setRedirectTimer(5)
             return
+          }
+          
+          // Update game time remaining
+          if (gameData.game.endTime) {
+            setGameTimeRemaining(formatRemainingTime(new Date(gameData.game.endTime)))
           }
         }
 
@@ -87,10 +95,8 @@ export default function PlayPage() {
             // Check if this is a new question
             if (!currentQuestion || questionData.question.id !== currentQuestion.id) {
               setCurrentQuestion(questionData.question)
-              setTimeLeft(questionData.question.timeLimit)
               setSelectedAnswer("")
               setShowResults(false)
-              setAnswerSubmitted(false)
             }
           }
         }
@@ -105,47 +111,26 @@ export default function PlayPage() {
     return () => clearInterval(interval)
   }, [params.id, currentQuestion])
 
+  // Redirect timer for game finished state
   useEffect(() => {
-    // Completely new timer implementation
-    if (!currentQuestion || !game || game.status !== 'playing') return;
-    
-    // Set initial time from question
-    setTimeLeft(currentQuestion.timeLimit);
-    
-    // Use Date.now() to track elapsed time precisely
-    const startTime = Date.now();
-    const totalTime = currentQuestion.timeLimit * 1000;
-    
-    const timer = setInterval(() => {
-      const elapsed = Date.now() - startTime;
-      const remaining = Math.max(0, Math.ceil((totalTime - elapsed) / 1000));
+    if (redirectTimer > 0) {
+      const timer = setTimeout(() => {
+        setRedirectTimer(prev => prev - 1)
+      }, 1000)
       
-      if (remaining <= 0) {
-        clearInterval(timer);
-        setTimeLeft(0);
-        if (!answerSubmitted && selectedAnswer) {
-          handleSubmitAnswer();
-        }
-      } else {
-        setTimeLeft(remaining);
-      }
-    }, 250); // Update more frequently for smoother countdown
-    
-    return () => clearInterval(timer);
-  }, [currentQuestion?.id, game?.status]) // Only depend on these specific properties
+      return () => clearTimeout(timer)
+    } else if (redirectTimer === 0 && gameFinished) {
+      router.push('/')
+    }
+  }, [redirectTimer, gameFinished, router])
 
   const handleSubmitAnswer = async () => {
     if (!currentQuestion || !game || !player) return
-    
-    // Allow answering until timer runs out
     
     // Check if answer is correct
     const correct = selectedAnswer === currentQuestion.options[currentQuestion.correctAnswer]
     setIsCorrect(correct)
     setShowResults(true)
-    
-    // Don't set answerSubmitted to true to allow multiple attempts
-    // setAnswerSubmitted(true)
     
     // Submit answer to API
     try {
@@ -156,7 +141,7 @@ export default function PlayPage() {
           playerId: player.id,
           questionId: currentQuestion.id,
           answer: selectedAnswer || "",
-          timeMs: (currentQuestion.timeLimit - timeLeft) * 1000
+          timeMs: 1000 // Fixed time since we don't track per-question time
         })
       })
       
@@ -181,6 +166,7 @@ export default function PlayPage() {
             <CardContent className="p-8 text-center">
               <Trophy className="h-16 w-16 text-yellow-500 mx-auto mb-4" />
               <h1 className="text-4xl font-bold text-gray-900 mb-2">Game Over!</h1>
+              <p className="text-sm text-gray-500 mb-4">Redirecting to home in {redirectTimer} seconds...</p>
               
               {player && (
                 <div className="bg-blue-50 rounded-lg p-6 mb-6 shadow-md">
@@ -288,15 +274,12 @@ export default function PlayPage() {
             </Badge>
           </div>
           
-          <div className="flex items-center gap-2 bg-white rounded-lg px-4 py-2 shadow-md">
-            <Clock className="h-5 w-5 text-red-500" />
-            <span className="text-xl font-bold text-red-500">{timeLeft}s</span>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 bg-white rounded-lg px-4 py-2 shadow-md">
+              <Timer className="h-5 w-5 text-blue-500" />
+              <span className="text-xl font-bold text-blue-500">{gameTimeRemaining}</span>
+            </div>
           </div>
-        </div>
-
-        {/* Progress Bar */}
-        <div className="mb-6">
-          <Progress value={(timeLeft / currentQuestion.timeLimit) * 100} className="h-3" />
         </div>
 
         {/* Question Card */}
@@ -336,20 +319,18 @@ export default function PlayPage() {
                       : 'hover:bg-gray-50 border-2'
                   }`}
                   onClick={() => setSelectedAnswer(option)}
-                  disabled={timeLeft === 0}
                 >
                   {option}
                 </Button>
               ))}
             </div>
             
-            {selectedAnswer && (
+            {selectedAnswer && !showResults && (
               <div className="text-center mt-6">
                 <Button 
                   onClick={handleSubmitAnswer} 
                   size="lg" 
                   className="bg-blue-600 hover:bg-blue-700 transition-all px-8 py-6 text-lg"
-                  disabled={timeLeft === 0}
                 >
                   Submit Answer
                 </Button>
@@ -370,7 +351,18 @@ export default function PlayPage() {
                     {isCorrect ? 'Correct!' : 'Incorrect'}
                   </span>
                 </div>
-                <p className="text-gray-600 mt-2">Try again or wait for next question...</p>
+                <div className="mt-4">
+                  <Button 
+                    onClick={() => {
+                      setSelectedAnswer("");
+                      setShowResults(false);
+                    }} 
+                    size="lg" 
+                    className="bg-blue-600 hover:bg-blue-700 transition-all px-8 py-6 text-lg"
+                  >
+                    Next Question
+                  </Button>
+                </div>
               </div>
             )}
           </CardContent>
