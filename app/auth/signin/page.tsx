@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { User } from "lucide-react"
+import { User, Microsoft } from "lucide-react"
 
 export default function SignInPage() {
   const { data: session, signIn } = useSession()
@@ -24,14 +24,41 @@ export default function SignInPage() {
     router.push("/")
   }
 
+  const handleMicrosoftSignIn = () => {
+    // Placeholder for Microsoft OAuth
+    alert("Microsoft sign-in would be implemented here with proper OAuth setup")
+  }
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-indigo-100">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-indigo-100 p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Choose Demo Account</CardTitle>
-          <p className="text-gray-600">Select a user to sign in as</p>
+          <CardTitle className="text-xl sm:text-2xl">Sign In to QuizVerse</CardTitle>
+          <p className="text-gray-600 text-sm sm:text-base">Choose how you'd like to sign in</p>
         </CardHeader>
-        <CardContent className="space-y-3">
+        <CardContent className="space-y-4">
+          <Button
+            onClick={handleMicrosoftSignIn}
+            variant="outline"
+            className="w-full justify-start"
+            size="lg"
+          >
+            <Microsoft className="mr-3 h-5 w-5" />
+            <div className="text-left">
+              <div className="font-medium">Sign in with Microsoft</div>
+              <div className="text-sm text-gray-500">Use your Microsoft account</div>
+            </div>
+          </Button>
+          
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-white px-2 text-muted-foreground">Or try demo accounts</span>
+            </div>
+          </div>
+          
           {demoUsers.map((user) => (
             <Button
               key={user.id}
@@ -44,14 +71,14 @@ export default function SignInPage() {
               <div className="text-left">
                 <div className="font-medium">{user.name}</div>
                 <div className="text-sm text-gray-500">
-                  {user.email} {user.isAdmin && "(Admin)"}
+                  {user.email}
                 </div>
               </div>
             </Button>
           ))}
           
-          <p className="text-sm text-gray-500 text-center mt-4">
-            This is a demo version. Choose any account to explore the features.
+          <p className="text-xs sm:text-sm text-gray-500 text-center mt-4">
+            Demo accounts are for testing purposes only
           </p>
         </CardContent>
       </Card>

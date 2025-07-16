@@ -15,15 +15,15 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100">
       <Header />
-      <main className="container mx-auto px-4 pt-24 pb-8">
+      <main className="container mx-auto px-4 pt-20 pb-8 sm:pt-24">
         {!session ? (
           // Landing page for non-authenticated users
           <div className="text-center space-y-8">
             <div className="space-y-4">
-              <h1 className="text-5xl font-bold text-gray-900">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900">
                 Welcome to <span className="text-purple-600">QuizVerse</span>
               </h1>
-              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
                 Create, host, and join interactive quiz games. Perfect for classrooms, team building, and fun with friends!
               </p>
             </div>
@@ -61,11 +61,11 @@ export default function HomePage() {
             </div>
 
             <div className="space-y-4">
-              <p className="text-lg text-gray-700">Choose a demo account to get started</p>
+              <p className="text-lg text-gray-700">Sign in to create and join quiz games</p>
               <Button size="lg" asChild>
                 <Link href="/auth/signin">
                   <Zap className="mr-2 h-5 w-5" />
-                  Get Started
+                  Sign In
                 </Link>
               </Button>
             </div>

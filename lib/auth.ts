@@ -19,7 +19,6 @@ const DEMO_USERS = [
 ]
 
 export async function getServerSession(): Promise<Session | null> {
-  // Return null for server-side (no session by default)
   return null
 }
 

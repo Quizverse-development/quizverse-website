@@ -17,11 +17,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   const [session, setSession] = useState<Session | null>(null)
 
   useEffect(() => {
-    // Check localStorage for saved session
-    const saved = localStorage.getItem("demo-session")
-    if (saved) {
-      setSession(JSON.parse(saved))
-    }
+    // Don't auto-login - users must manually sign in
   }, [])
 
   const signIn = (user: any) => {
