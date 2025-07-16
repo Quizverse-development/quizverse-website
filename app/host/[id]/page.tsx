@@ -244,24 +244,27 @@ export default function HostPage() {
               <CardContent>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                   {currentQuestion.options.map((option, index) => (
-                    <button
+                    <div
                       key={index}
-                      onClick={() => !showResults && nextQuestion()}
-                      className={`p-4 rounded-lg border-2 text-center font-medium cursor-pointer hover:bg-gray-100 transition-colors ${
+                      className={`p-4 rounded-lg border-2 text-center font-medium ${
                         showResults && index === currentQuestion.correctAnswer
                           ? 'bg-green-100 border-green-400 text-green-800'
                           : 'bg-gray-50 border-gray-200 text-gray-700'
                       }`}
                     >
                       {option}
-                    </button>
+                    </div>
                   ))}
                 </div>
                 
                 {showResults && (
                   <div className="text-center">
-                    <Button onClick={nextQuestion} size="lg">
-                      <ArrowRight className="mr-2 h-5 w-5" />
+                    <Button 
+                      onClick={nextQuestion} 
+                      size="lg"
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg"
+                    >
+                      <ArrowRight className="mr-2 h-6 w-6" />
                       Next Question
                     </Button>
                   </div>

@@ -8,10 +8,11 @@ import { Button } from "@/components/ui/button"
 import { JoinGameDialog } from "@/components/join-game-dialog"
 import { PREMADE_QUIZZES } from "@/lib/game-store"
 import { ADDITIONAL_QUIZZES, getCategoryIcon } from "@/lib/quiz-utils"
+import { ENHANCED_QUIZZES } from "@/lib/enhanced-quizzes"
 import { Badge } from "@/components/ui/badge"
 
 // Combine all quizzes
-const allQuizzes = [...PREMADE_QUIZZES, ...ADDITIONAL_QUIZZES]
+const allQuizzes = [...PREMADE_QUIZZES, ...ADDITIONAL_QUIZZES, ...ENHANCED_QUIZZES]
 
 export function HomePage() {
   const router = useRouter()
