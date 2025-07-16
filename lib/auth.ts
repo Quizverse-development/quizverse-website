@@ -22,6 +22,34 @@ export async function getServerSession(): Promise<Session | null> {
   return null
 }
 
+// Get user stats for admin dashboard
+export function getUserStats() {
+  return {
+    totalUsers: 256,
+    activeUsers: 124,
+    newUsersToday: 18,
+    totalGamesPlayed: 1893,
+    averageGameTime: "8.5 min",
+    totalPlayTime: "267 hours"
+  }
+}
+
+// Get top users for admin dashboard
+export function getTopUsers() {
+  return [
+    { id: 1, name: "Sarah Johnson", games: 87, hours: 12.5, animal: "🦊" },
+    { id: 2, name: "Michael Chen", games: 76, hours: 10.2, animal: "🐼" },
+    { id: 3, name: "Emma Wilson", games: 65, hours: 9.8, animal: "🦁" },
+    { id: 4, name: "James Smith", games: 58, hours: 8.3, animal: "🐵" },
+    { id: 5, name: "Olivia Brown", games: 52, hours: 7.1, animal: "🦄" },
+    { id: 6, name: "Noah Davis", games: 49, hours: 6.9, animal: "🐯" },
+    { id: 7, name: "Sophia Martinez", games: 45, hours: 6.5, animal: "🐰" },
+    { id: 8, name: "Liam Johnson", games: 42, hours: 6.2, animal: "🐺" },
+    { id: 9, name: "Ava Thompson", games: 38, hours: 5.8, animal: "🦊" },
+    { id: 10, name: "William Garcia", games: 36, hours: 5.5, animal: "🐻" }
+  ]
+}
+
 export function getDemoUsers() {
   return DEMO_USERS
 }

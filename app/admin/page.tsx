@@ -1,4 +1,4 @@
-import { getServerSession } from "@/lib/auth"
+import { getServerSession, getUserStats, getTopUsers } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import { AdminDashboard } from "@/components/admin-dashboard"
 import { Header } from "@/components/header"
