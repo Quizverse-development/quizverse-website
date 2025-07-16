@@ -17,10 +17,17 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   const [session, setSession] = useState<Session | null>(null)
 
   useEffect(() => {
-    // Clear any existing session on app load
-    localStorage.removeItem("user-session")
-    localStorage.removeItem("demo-session")
-    setSession(null)
+    // Check for existing session first
+    const savedSession = localStorage.getItem("user-session")
+    if (savedSession) {
+      try {
+        setSession(JSON.parse(savedSession))
+      } catch (error) {
+        localStorage.removeItem("user-session")
+        localStorage.removeItem("demo-session")
+        setSession(null)
+      }
+    }
   }, [])
 
   const signIn = (user: any) => {
