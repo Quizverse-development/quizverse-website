@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { Clock, Users, Trophy, CheckCircle, XCircle } from "lucide-react"
-import { getFlagEmoji } from "@/lib/flag-utils"
+import { getFlagUrl, getFlagEmoji } from "@/lib/flag-utils"
 
 interface Question {
   id: number
@@ -143,7 +143,9 @@ export default function PlayPage() {
     const correct = selectedAnswer === currentQuestion.options[currentQuestion.correctAnswer]
     setIsCorrect(correct)
     setShowResults(true)
-    setAnswerSubmitted(true)
+    
+    // Don't set answerSubmitted to true to allow multiple attempts
+    // setAnswerSubmitted(true)
     
     // Submit answer to API
     try {
@@ -173,22 +175,22 @@ export default function PlayPage() {
     const playerScore = leaderboard.find(p => p.id === player?.id)?.score || 0
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 p-4">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
         <div className="container mx-auto max-w-4xl">
-          <Card className="w-full">
+          <Card className="w-full shadow-lg">
             <CardContent className="p-8 text-center">
               <Trophy className="h-16 w-16 text-yellow-500 mx-auto mb-4" />
               <h1 className="text-4xl font-bold text-gray-900 mb-2">Game Over!</h1>
               
               {player && (
-                <div className="bg-purple-50 rounded-lg p-6 mb-6">
+                <div className="bg-blue-50 rounded-lg p-6 mb-6 shadow-md">
                   <div className="flex items-center justify-center gap-3 mb-4">
                     <span className="text-4xl">{player.animal}</span>
                     <span className="text-2xl font-bold">{player.username}</span>
                   </div>
                   <div className="text-center">
                     <p className="text-lg text-gray-600">Your Rank</p>
-                    <p className="text-4xl font-bold text-purple-600">#{playerRank}</p>
+                    <p className="text-4xl font-bold text-blue-600">#{playerRank}</p>
                     <p className="text-lg text-gray-600 mt-2">Final Score: {playerScore} points</p>
                   </div>
                 </div>
@@ -199,8 +201,8 @@ export default function PlayPage() {
                 {leaderboard.slice(0, 5).map((p, index) => (
                   <div
                     key={p.id}
-                    className={`flex items-center justify-between p-3 rounded-lg ${
-                      p.id === player?.id ? 'bg-purple-100 border-2 border-purple-400' :
+                    className={`flex items-center justify-between p-3 rounded-lg shadow-sm ${
+                      p.id === player?.id ? 'bg-blue-100 border-2 border-blue-400' :
                       index === 0 ? 'bg-yellow-100 border border-yellow-300' :
                       'bg-white border border-gray-200'
                     }`}
@@ -215,7 +217,7 @@ export default function PlayPage() {
                 ))}
               </div>
               
-              <Button onClick={() => router.push("/")} size="lg">
+              <Button onClick={() => router.push("/")} size="lg" className="bg-blue-600 hover:bg-blue-700 px-8 py-6 text-lg">
                 Play Again
               </Button>
             </CardContent>
@@ -227,8 +229,8 @@ export default function PlayPage() {
 
   if (!game || game.status === 'lobby') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 flex items-center justify-center p-4">
-        <Card className="w-full max-w-lg">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center p-4">
+        <Card className="w-full max-w-lg shadow-lg">
           <CardContent className="p-8 text-center space-y-6">
             <div className="space-y-2">
               <h1 className="text-3xl font-bold text-gray-900">Waiting for Game</h1>
@@ -237,14 +239,14 @@ export default function PlayPage() {
 
             <div className="flex justify-center">
               <div className="animate-pulse flex space-x-2">
-                <div className="w-3 h-3 bg-purple-600 rounded-full animate-bounce"></div>
-                <div className="w-3 h-3 bg-purple-600 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                <div className="w-3 h-3 bg-purple-600 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                <div className="w-3 h-3 bg-blue-600 rounded-full animate-bounce"></div>
+                <div className="w-3 h-3 bg-blue-600 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                <div className="w-3 h-3 bg-blue-600 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
               </div>
             </div>
 
             {player && (
-              <div className="bg-gray-50 rounded-lg p-4">
+              <div className="bg-gray-50 rounded-lg p-4 shadow-md">
                 <p className="text-sm text-gray-600 mb-2">You are playing as:</p>
                 <div className="flex items-center justify-center gap-3">
                   <span className="text-3xl">{player.animal}</span>
@@ -260,10 +262,10 @@ export default function PlayPage() {
 
   if (!currentQuestion) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md shadow-lg">
           <CardContent className="p-8 text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
             <p className="text-lg">Loading question...</p>
           </CardContent>
         </Card>
@@ -272,7 +274,7 @@ export default function PlayPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
       <div className="container mx-auto max-w-4xl">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
@@ -286,7 +288,7 @@ export default function PlayPage() {
             </Badge>
           </div>
           
-          <div className="flex items-center gap-2 bg-white rounded-lg px-4 py-2">
+          <div className="flex items-center gap-2 bg-white rounded-lg px-4 py-2 shadow-md">
             <Clock className="h-5 w-5 text-red-500" />
             <span className="text-xl font-bold text-red-500">{timeLeft}s</span>
           </div>
@@ -298,7 +300,7 @@ export default function PlayPage() {
         </div>
 
         {/* Question Card */}
-        <Card className="w-full mb-6">
+        <Card className="w-full mb-6 shadow-lg">
           <CardContent className="p-8">
             <h1 className="text-2xl sm:text-3xl font-bold text-center text-gray-900 mb-8">
               {currentQuestion.question}
@@ -306,11 +308,13 @@ export default function PlayPage() {
             
             {currentQuestion.question.includes('flag') && (
               <div className="mb-6 text-center">
-                <div className="p-4 bg-gray-50 rounded-lg inline-block shadow-md">
-                  <div className="h-32 w-full flex items-center justify-center mb-2">
-                    <div className="bg-gray-100 p-6 rounded-md border border-gray-300 inline-flex items-center justify-center shadow-md">
-                      <span className="text-8xl">{getFlagEmoji(currentQuestion.options[currentQuestion.correctAnswer])}</span>
-                    </div>
+                <div className="p-4 bg-gray-50 rounded-lg inline-block shadow-lg">
+                  <div className="h-48 w-full flex items-center justify-center mb-2">
+                    <img 
+                      src={getFlagUrl(currentQuestion.options[currentQuestion.correctAnswer])} 
+                      alt="Flag"
+                      className="max-h-40 border border-gray-200 rounded-md shadow-md" 
+                    />
                   </div>
                   <p className="text-sm text-gray-600 font-medium">Choose the correct country for this flag</p>
                 </div>
@@ -322,14 +326,14 @@ export default function PlayPage() {
                 <Button
                   key={index}
                   variant={selectedAnswer === option ? "default" : "outline"}
-                  className={`h-16 text-lg font-medium transition-all ${
+                  className={`h-20 text-lg font-medium transition-all shadow-sm hover:shadow-md ${
                     showResults && option === currentQuestion.options[currentQuestion.correctAnswer]
                       ? 'bg-green-500 hover:bg-green-600 text-white border-green-500'
                       : showResults && selectedAnswer === option && option !== currentQuestion.options[currentQuestion.correctAnswer]
                       ? 'bg-red-500 hover:bg-red-600 text-white border-red-500'
                       : selectedAnswer === option
-                      ? 'bg-purple-600 hover:bg-purple-700 text-white'
-                      : 'hover:bg-gray-50'
+                      ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                      : 'hover:bg-gray-50 border-2'
                   }`}
                   onClick={() => setSelectedAnswer(option)}
                   disabled={timeLeft === 0}
@@ -344,10 +348,10 @@ export default function PlayPage() {
                 <Button 
                   onClick={handleSubmitAnswer} 
                   size="lg" 
-                  className="bg-purple-600 hover:bg-purple-700 transition-all"
+                  className="bg-blue-600 hover:bg-blue-700 transition-all px-8 py-6 text-lg"
                   disabled={timeLeft === 0}
                 >
-                  {answerSubmitted ? 'Change Answer' : 'Submit Answer'}
+                  Submit Answer
                 </Button>
               </div>
             )}
@@ -366,7 +370,7 @@ export default function PlayPage() {
                     {isCorrect ? 'Correct!' : 'Incorrect'}
                   </span>
                 </div>
-                <p className="text-gray-600 mt-2">Waiting for next question...</p>
+                <p className="text-gray-600 mt-2">Try again or wait for next question...</p>
               </div>
             )}
           </CardContent>
@@ -374,7 +378,7 @@ export default function PlayPage() {
         
         {/* Mini Leaderboard */}
         {leaderboard.length > 0 && (
-          <Card className="w-full">
+          <Card className="w-full shadow-md">
             <CardContent className="p-4">
               <h3 className="font-medium mb-2 flex items-center">
                 <Trophy className="h-4 w-4 text-yellow-500 mr-1" />

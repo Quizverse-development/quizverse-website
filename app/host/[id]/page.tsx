@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Trophy, Users, Clock, ArrowRight, RotateCcw } from "lucide-react"
-import { getFlagEmoji } from "@/lib/flag-utils"
+import { getFlagUrl, getFlagEmoji } from "@/lib/flag-utils"
 
 interface Question {
   id: number
@@ -130,9 +130,9 @@ export default function HostPage() {
 
   if (gameFinished) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 p-4">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
         <div className="container mx-auto max-w-6xl">
-          <Card className="w-full">
+          <Card className="w-full shadow-lg">
             <CardHeader className="text-center">
               <Trophy className="h-16 w-16 text-yellow-500 mx-auto mb-4" />
               <CardTitle className="text-4xl font-bold text-gray-900">Game Complete!</CardTitle>
@@ -145,7 +145,7 @@ export default function HostPage() {
                   {leaderboard.map((player, index) => (
                     <div
                       key={player.id}
-                      className={`flex items-center justify-between p-4 rounded-lg ${
+                      className={`flex items-center justify-between p-4 rounded-lg shadow-sm ${
                         index === 0 ? 'bg-gradient-to-r from-yellow-100 to-yellow-200 border-2 border-yellow-400' :
                         index === 1 ? 'bg-gradient-to-r from-gray-100 to-gray-200 border-2 border-gray-400' :
                         index === 2 ? 'bg-gradient-to-r from-orange-100 to-orange-200 border-2 border-orange-400' :
@@ -173,7 +173,7 @@ export default function HostPage() {
               </div>
               
               <div className="text-center mt-8">
-                <Button onClick={() => router.push("/")} size="lg" className="mr-4">
+                <Button onClick={() => router.push("/")} size="lg" className="bg-blue-600 hover:bg-blue-700 px-8 py-6 text-lg">
                   <RotateCcw className="mr-2 h-5 w-5" />
                   Host Another Game
                 </Button>
@@ -187,10 +187,10 @@ export default function HostPage() {
 
   if (!game || !currentQuestion) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md shadow-lg">
           <CardContent className="p-8 text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
             <p className="text-lg">Loading game...</p>
           </CardContent>
         </Card>
@@ -199,7 +199,7 @@ export default function HostPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
       <div className="container mx-auto max-w-7xl">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
@@ -213,7 +213,7 @@ export default function HostPage() {
             </Badge>
           </div>
           
-          <div className="flex items-center gap-2 bg-white rounded-lg px-4 py-2">
+          <div className="flex items-center gap-2 bg-white rounded-lg px-4 py-2 shadow-md">
             <Clock className="h-5 w-5 text-red-500" />
             <span className="text-xl font-bold text-red-500">{timeLeft}s</span>
           </div>
@@ -222,7 +222,7 @@ export default function HostPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Question Display */}
           <div className="lg:col-span-2">
-            <Card className="w-full">
+            <Card className="w-full shadow-lg">
               <CardHeader>
                 <Progress value={(timeLeft / currentQuestion.timeLimit) * 100} className="h-3 mb-4" />
                 <CardTitle className="text-2xl sm:text-3xl text-center text-gray-900">
@@ -230,11 +230,13 @@ export default function HostPage() {
                 </CardTitle>
                 {currentQuestion.question.includes('flag') && (
                   <div className="mt-4 text-center">
-                    <div className="p-4 bg-gray-50 rounded-lg inline-block">
-                      <div className="h-32 w-full flex items-center justify-center mb-2">
-                        <div className="bg-gray-100 p-6 rounded-md border border-gray-300 inline-flex items-center justify-center shadow-md">
-                          <span className="text-8xl">{getFlagEmoji(currentQuestion.options[currentQuestion.correctAnswer])}</span>
-                        </div>
+                    <div className="p-4 bg-gray-50 rounded-lg inline-block shadow-lg">
+                      <div className="h-48 w-full flex items-center justify-center mb-2">
+                        <img 
+                          src={getFlagUrl(currentQuestion.options[currentQuestion.correctAnswer])} 
+                          alt={`Flag of ${currentQuestion.options[currentQuestion.correctAnswer]}`}
+                          className="max-h-40 border border-gray-200 rounded-md shadow-md" 
+                        />
                       </div>
                       <p className="text-sm text-gray-600 font-medium">Flag of {currentQuestion.options[currentQuestion.correctAnswer]}</p>
                     </div>
@@ -246,7 +248,7 @@ export default function HostPage() {
                   {currentQuestion.options.map((option, index) => (
                     <div
                       key={index}
-                      className={`p-4 rounded-lg border-2 text-center font-medium ${
+                      className={`p-4 rounded-lg border-2 text-center font-medium shadow-sm ${
                         showResults && index === currentQuestion.correctAnswer
                           ? 'bg-green-100 border-green-400 text-green-800'
                           : 'bg-gray-50 border-gray-200 text-gray-700'
@@ -275,7 +277,7 @@ export default function HostPage() {
 
           {/* Live Leaderboard */}
           <div className="lg:col-span-1">
-            <Card className="w-full h-fit">
+            <Card className="w-full h-fit shadow-md">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Trophy className="h-5 w-5 text-yellow-500" />
@@ -290,7 +292,7 @@ export default function HostPage() {
                     leaderboard.slice(0, 10).map((player, index) => (
                       <div
                         key={player.id}
-                        className={`flex items-center justify-between p-3 rounded-lg ${
+                        className={`flex items-center justify-between p-3 rounded-lg shadow-sm ${
                           index === 0 ? 'bg-yellow-50 border border-yellow-200' :
                           index === 1 ? 'bg-gray-50 border border-gray-200' :
                           index === 2 ? 'bg-orange-50 border border-orange-200' :
