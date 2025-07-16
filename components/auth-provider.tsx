@@ -17,7 +17,9 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   const [session, setSession] = useState<Session | null>(null)
 
   useEffect(() => {
-    // Don't auto-login - users must manually sign in
+    // Clear any existing session on app load
+    localStorage.removeItem("demo-session")
+    setSession(null)
   }, [])
 
   const signIn = (user: any) => {

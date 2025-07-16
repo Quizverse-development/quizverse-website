@@ -43,6 +43,60 @@ export const ANIMALS = [
 // Pre-made quizzes
 export const PREMADE_QUIZZES: Quiz[] = [
   {
+    id: 'animals',
+    title: 'Animal Kingdom',
+    description: 'Test your knowledge about animals',
+    category: 'Nature',
+    questions: [
+      { id: 1, question: 'What is the largest mammal in the world?', options: ['Elephant', 'Blue Whale', 'Giraffe', 'Hippopotamus'], correctAnswer: 1, timeLimit: 20 },
+      { id: 2, question: 'Which animal is known as the King of the Jungle?', options: ['Tiger', 'Lion', 'Leopard', 'Cheetah'], correctAnswer: 1, timeLimit: 15 },
+      { id: 3, question: 'How many hearts does an octopus have?', options: ['1', '2', '3', '4'], correctAnswer: 2, timeLimit: 20 },
+      { id: 4, question: 'Which bird cannot fly?', options: ['Eagle', 'Penguin', 'Sparrow', 'Owl'], correctAnswer: 1, timeLimit: 15 },
+      { id: 5, question: 'What do pandas mainly eat?', options: ['Fish', 'Meat', 'Bamboo', 'Fruits'], correctAnswer: 2, timeLimit: 15 },
+      { id: 6, question: 'Which animal can change its color?', options: ['Chameleon', 'Tiger', 'Zebra', 'Elephant'], correctAnswer: 0, timeLimit: 15 },
+      { id: 7, question: 'How many legs does a spider have?', options: ['6', '8', '10', '12'], correctAnswer: 1, timeLimit: 15 },
+      { id: 8, question: 'Which animal is the fastest on land?', options: ['Lion', 'Horse', 'Cheetah', 'Gazelle'], correctAnswer: 2, timeLimit: 15 },
+      { id: 9, question: 'What type of animal is a dolphin?', options: ['Fish', 'Mammal', 'Reptile', 'Bird'], correctAnswer: 1, timeLimit: 15 },
+      { id: 10, question: 'Which animal never sleeps?', options: ['Shark', 'Dolphin', 'Bullfrog', 'Elephant'], correctAnswer: 2, timeLimit: 20 }
+    ]
+  },
+  {
+    id: 'movies',
+    title: 'Movie Trivia',
+    description: 'Test your knowledge of popular movies',
+    category: 'Entertainment',
+    questions: [
+      { id: 1, question: 'Who directed the movie "Jaws"?', options: ['George Lucas', 'Steven Spielberg', 'Martin Scorsese', 'Francis Ford Coppola'], correctAnswer: 1, timeLimit: 20 },
+      { id: 2, question: 'Which movie features the song "My Heart Will Go On"?', options: ['The Little Mermaid', 'Beauty and the Beast', 'Titanic', 'Frozen'], correctAnswer: 2, timeLimit: 15 },
+      { id: 3, question: 'What is the highest-grossing movie of all time?', options: ['Avatar', 'Avengers: Endgame', 'Titanic', 'Star Wars'], correctAnswer: 1, timeLimit: 25 },
+      { id: 4, question: 'Who played the character of Iron Man?', options: ['Chris Evans', 'Robert Downey Jr.', 'Chris Hemsworth', 'Mark Ruffalo'], correctAnswer: 1, timeLimit: 15 },
+      { id: 5, question: 'Which movie won the Academy Award for Best Picture in 2020?', options: ['1917', 'Joker', 'Parasite', 'Once Upon a Time in Hollywood'], correctAnswer: 2, timeLimit: 25 },
+      { id: 6, question: 'In which movie does the character say "May the Force be with you"?', options: ['Star Trek', 'Star Wars', 'Guardians of the Galaxy', 'Interstellar'], correctAnswer: 1, timeLimit: 15 },
+      { id: 7, question: 'Who directed "The Dark Knight"?', options: ['Christopher Nolan', 'Tim Burton', 'Zack Snyder', 'Sam Raimi'], correctAnswer: 0, timeLimit: 20 },
+      { id: 8, question: 'Which animated movie features the song "Let It Go"?', options: ['Moana', 'Frozen', 'Tangled', 'Brave'], correctAnswer: 1, timeLimit: 15 },
+      { id: 9, question: 'What is the name of the coffee shop in the TV show "Friends"?', options: ['Central Perk', 'The Grind', 'Java Joe\'s', 'Bean There'], correctAnswer: 0, timeLimit: 20 },
+      { id: 10, question: 'Which movie features a character named Forrest Gump?', options: ['Cast Away', 'Philadelphia', 'Forrest Gump', 'Big'], correctAnswer: 2, timeLimit: 15 }
+    ]
+  },
+  {
+    id: 'food',
+    title: 'Food & Cooking',
+    description: 'Test your culinary knowledge',
+    category: 'Food',
+    questions: [
+      { id: 1, question: 'Which spice is derived from the Crocus flower?', options: ['Turmeric', 'Saffron', 'Paprika', 'Cinnamon'], correctAnswer: 1, timeLimit: 20 },
+      { id: 2, question: 'What is the main ingredient in guacamole?', options: ['Tomato', 'Avocado', 'Lime', 'Onion'], correctAnswer: 1, timeLimit: 15 },
+      { id: 3, question: 'Which country is famous for inventing pizza?', options: ['France', 'Spain', 'Italy', 'Greece'], correctAnswer: 2, timeLimit: 15 },
+      { id: 4, question: 'What type of pastry is used to make profiteroles?', options: ['Puff pastry', 'Shortcrust pastry', 'Choux pastry', 'Filo pastry'], correctAnswer: 2, timeLimit: 25 },
+      { id: 5, question: 'Which fruit is known as the "king of fruits"?', options: ['Mango', 'Durian', 'Pineapple', 'Dragon fruit'], correctAnswer: 1, timeLimit: 20 },
+      { id: 6, question: 'What is the most consumed beverage in the world after water?', options: ['Coffee', 'Tea', 'Soda', 'Beer'], correctAnswer: 1, timeLimit: 15 },
+      { id: 7, question: 'Which cheese is traditionally used on a Margherita pizza?', options: ['Cheddar', 'Mozzarella', 'Parmesan', 'Gouda'], correctAnswer: 1, timeLimit: 15 },
+      { id: 8, question: 'What is the main ingredient in hummus?', options: ['Lentils', 'Chickpeas', 'Black beans', 'Kidney beans'], correctAnswer: 1, timeLimit: 15 },
+      { id: 9, question: 'Which cooking method uses dry heat in an oven?', options: ['Boiling', 'Steaming', 'Baking', 'Frying'], correctAnswer: 2, timeLimit: 15 },
+      { id: 10, question: 'What is the hottest part of a chili pepper?', options: ['The skin', 'The seeds', 'The flesh', 'The stem'], correctAnswer: 1, timeLimit: 20 }
+    ]
+  },
+  {
     id: 'flags',
     title: 'World Flags',
     description: 'Test your knowledge of country flags',
