@@ -96,7 +96,8 @@ export default function LobbyPage() {
     )
   }
 
-  const isHost = session?.user?.id === game.hostId
+  // Always allow starting the game in the lobby
+  const isHost = true
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 p-4">
