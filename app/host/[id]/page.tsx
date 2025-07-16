@@ -83,22 +83,31 @@ export default function HostPage() {
   }, [params.id])
 
   useEffect(() => {
-    // Fixed timer implementation
+    // Completely new timer implementation
     if (!currentQuestion || !game || game.status !== 'playing' || showResults) return;
     
+    // Set initial time from question
+    setTimeLeft(currentQuestion.timeLimit);
+    
+    // Use Date.now() to track elapsed time precisely
+    const startTime = Date.now();
+    const totalTime = currentQuestion.timeLimit * 1000;
+    
     const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          setShowResults(true);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
+      const elapsed = Date.now() - startTime;
+      const remaining = Math.max(0, Math.ceil((totalTime - elapsed) / 1000));
+      
+      if (remaining <= 0) {
+        clearInterval(timer);
+        setTimeLeft(0);
+        setShowResults(true);
+      } else {
+        setTimeLeft(remaining);
+      }
+    }, 250); // Update more frequently for smoother countdown
     
     return () => clearInterval(timer);
-  }, [currentQuestion, game, showResults])
+  }, [currentQuestion?.id, game?.status, showResults]) // Only depend on these specific properties
 
   const nextQuestion = async () => {
     try {
