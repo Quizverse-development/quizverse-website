@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Trophy, Users, Clock, ArrowRight, RotateCcw } from "lucide-react"
+import { getFlagEmoji } from "@/lib/flag-utils"
 
 interface Question {
   id: number
@@ -230,11 +231,11 @@ export default function HostPage() {
                 {currentQuestion.question.includes('flag') && (
                   <div className="mt-4 text-center">
                     <div className="p-4 bg-gray-50 rounded-lg inline-block">
-                      <img 
-                        src={`https://flagcdn.com/w320/${currentQuestion.options[currentQuestion.correctAnswer].toLowerCase().substring(0,2)}.png`} 
-                        alt={`Flag of ${currentQuestion.options[currentQuestion.correctAnswer]}`}
-                        className="max-h-32 mx-auto mb-2 border border-gray-200 shadow-sm" 
-                      />
+                      <div className="h-32 w-full flex items-center justify-center mb-2">
+                        <div className="bg-gray-100 p-2 rounded-md border border-gray-300 inline-flex items-center justify-center">
+                          <span className="text-5xl">{getFlagEmoji(currentQuestion.options[currentQuestion.correctAnswer])}</span>
+                        </div>
+                      </div>
                       <p className="text-sm text-gray-600 font-medium">Flag of {currentQuestion.options[currentQuestion.correctAnswer]}</p>
                     </div>
                   </div>
