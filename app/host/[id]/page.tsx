@@ -258,25 +258,26 @@ export default function HostPage() {
                     <p className="text-center text-gray-500 py-4">No players have scored yet</p>
                   ) : (
                     leaderboard.slice(0, 10).map((player, index) => (
-                    <div
-                      key={player.id}
-                      className={`flex items-center justify-between p-3 rounded-lg ${
-                        index === 0 ? 'bg-yellow-50 border border-yellow-200' :
-                        index === 1 ? 'bg-gray-50 border border-gray-200' :
-                        index === 2 ? 'bg-orange-50 border border-orange-200' :
-                        'bg-white border border-gray-100'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-bold">#{index + 1}</span>
-                        <span className="text-lg">{player.animal}</span>
-                        <span className="text-sm font-medium truncate">{player.username}</span>
+                      <div
+                        key={player.id}
+                        className={`flex items-center justify-between p-3 rounded-lg ${
+                          index === 0 ? 'bg-yellow-50 border border-yellow-200' :
+                          index === 1 ? 'bg-gray-50 border border-gray-200' :
+                          index === 2 ? 'bg-orange-50 border border-orange-200' :
+                          'bg-white border border-gray-100'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-bold">#{index + 1}</span>
+                          <span className="text-lg">{player.animal}</span>
+                          <span className="text-sm font-medium truncate">{player.username}</span>
+                        </div>
+                        <Badge variant="secondary" className="text-xs">
+                          {player.score}
+                        </Badge>
                       </div>
-                      <Badge variant="secondary" className="text-xs">
-                        {player.score}
-                      </Badge>
-                    </div>
-                  ))}
+                    ))
+                  )}
                 </div>
                 <div className="mt-4 text-center">
                   <Button 
