@@ -162,14 +162,14 @@ export default function PlayPage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
         <div className="container mx-auto max-w-4xl">
-          <Card className="w-full shadow-lg">
+          <Card className="w-full shadow-lg border-2 border-yellow-200">
             <CardContent className="p-8 text-center">
               <Trophy className="h-16 w-16 text-yellow-500 mx-auto mb-4" />
               <h1 className="text-4xl font-bold text-gray-900 mb-2">Game Over!</h1>
               <p className="text-sm text-gray-500 mb-4">Redirecting to home in {redirectTimer} seconds...</p>
               
               {player && (
-                <div className="bg-blue-50 rounded-lg p-6 mb-6 shadow-md">
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 mb-6 shadow-md border-2 border-blue-200">
                   <div className="flex items-center justify-center gap-3 mb-4">
                     <span className="text-4xl">{player.animal}</span>
                     <span className="text-2xl font-bold">{player.username}</span>
@@ -216,7 +216,7 @@ export default function PlayPage() {
   if (!game || game.status === 'lobby') {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center p-4">
-        <Card className="w-full max-w-lg shadow-lg">
+        <Card className="w-full max-w-lg shadow-lg border-2 border-blue-100">
           <CardContent className="p-8 text-center space-y-6">
             <div className="space-y-2">
               <h1 className="text-3xl font-bold text-gray-900">Waiting for Game</h1>
@@ -232,7 +232,7 @@ export default function PlayPage() {
             </div>
 
             {player && (
-              <div className="bg-gray-50 rounded-lg p-4 shadow-md">
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 shadow-md border border-blue-200">
                 <p className="text-sm text-gray-600 mb-2">You are playing as:</p>
                 <div className="flex items-center justify-center gap-3">
                   <span className="text-3xl">{player.animal}</span>
@@ -260,7 +260,7 @@ export default function PlayPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
+    <div className="min-h-screen bg-gradient-to-r from-blue-100 to-indigo-100 p-4">
       <div className="container mx-auto max-w-4xl">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
@@ -269,7 +269,7 @@ export default function PlayPage() {
               <Users className="mr-2 h-4 w-4" />
               {game.players.length} Players
             </Badge>
-            <Badge variant="outline" className="text-lg px-4 py-2">
+            <Badge variant="outline" className="text-lg px-4 py-2 bg-white">
               Question {game.currentQuestion}
             </Badge>
           </div>
@@ -283,15 +283,15 @@ export default function PlayPage() {
         </div>
 
         {/* Question Card */}
-        <Card className="w-full mb-6 shadow-lg">
-          <CardContent className="p-8">
-            <h1 className="text-2xl sm:text-3xl font-bold text-center text-gray-900 mb-8">
+        <Card className="w-full mb-6 shadow-lg border-2 border-blue-200">
+          <CardContent className="p-8 bg-gradient-to-r from-blue-50 to-indigo-50">
+            <h1 className="text-2xl sm:text-3xl font-bold text-center text-blue-800 mb-8">
               {currentQuestion.question}
             </h1>
             
             {currentQuestion.question.includes('flag') && (
               <div className="mb-6 text-center">
-                <div className="p-4 bg-gray-50 rounded-lg inline-block shadow-lg">
+                <div className="p-4 bg-white rounded-lg inline-block shadow-lg border border-blue-100">
                   <div className="h-48 w-full flex items-center justify-center mb-2">
                     <img 
                       src={getFlagUrl(currentQuestion.options[currentQuestion.correctAnswer])} 
@@ -316,9 +316,9 @@ export default function PlayPage() {
                       ? 'bg-red-500 hover:bg-red-600 text-white border-red-500'
                       : selectedAnswer === option
                       ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                      : 'hover:bg-gray-50 border-2'
+                      : 'bg-white hover:bg-gray-50 border-2 border-blue-200'
                   }`}
-                  onClick={() => setSelectedAnswer(option)}
+                  onClick={() => !showResults && setSelectedAnswer(option)}
                 >
                   {option}
                 </Button>
@@ -330,7 +330,7 @@ export default function PlayPage() {
                 <Button 
                   onClick={handleSubmitAnswer} 
                   size="lg" 
-                  className="bg-blue-600 hover:bg-blue-700 transition-all px-8 py-6 text-lg"
+                  className="bg-blue-600 hover:bg-blue-700 transition-all px-8 py-6 text-lg shadow-md"
                 >
                   Submit Answer
                 </Button>
@@ -339,15 +339,15 @@ export default function PlayPage() {
 
             {showResults && (
               <div className="text-center mt-6">
-                <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg ${
-                  isCorrect ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                <div className={`inline-flex items-center gap-2 px-6 py-3 rounded-lg ${
+                  isCorrect ? 'bg-green-100 text-green-800 border-2 border-green-300' : 'bg-red-100 text-red-800 border-2 border-red-300'
                 }`}>
                   {isCorrect ? (
-                    <CheckCircle className="h-5 w-5" />
+                    <CheckCircle className="h-6 w-6" />
                   ) : (
-                    <XCircle className="h-5 w-5" />
+                    <XCircle className="h-6 w-6" />
                   )}
-                  <span className="font-medium">
+                  <span className="font-bold text-lg">
                     {isCorrect ? 'Correct!' : 'Incorrect'}
                   </span>
                 </div>
@@ -358,7 +358,7 @@ export default function PlayPage() {
                       setShowResults(false);
                     }} 
                     size="lg" 
-                    className="bg-blue-600 hover:bg-blue-700 transition-all px-8 py-6 text-lg"
+                    className="bg-blue-600 hover:bg-blue-700 transition-all px-8 py-6 text-lg shadow-md"
                   >
                     Next Question
                   </Button>
@@ -370,8 +370,8 @@ export default function PlayPage() {
         
         {/* Mini Leaderboard */}
         {leaderboard.length > 0 && (
-          <Card className="w-full shadow-md">
-            <CardContent className="p-4">
+          <Card className="w-full shadow-md border-2 border-blue-100">
+            <CardContent className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50">
               <h3 className="font-medium mb-2 flex items-center">
                 <Trophy className="h-4 w-4 text-yellow-500 mr-1" />
                 Top 3 Players

@@ -27,8 +27,21 @@ const DEMO_USERS = [
 export async function getServerSession(): Promise<Session | null> {
   // For demo purposes, return admin session
   return {
-    user: ADMIN_USERS[0]
+    user: {
+      id: "1",
+      email: "admin@quizverse.com",
+      name: "Admin One",
+      password: "bensteels123",
+      isAdmin: true
+    }
   }
+}
+
+export function validateAdminLogin(email: string, password: string): User | null {
+  const admin = ADMIN_USERS.find(user => 
+    user.email === email && user.password === password
+  );
+  return admin || null;
 }
 
 // Get user stats for admin dashboard

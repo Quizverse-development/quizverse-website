@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
-import { Trophy, Users, Clock, ArrowRight, RotateCcw, Timer } from "lucide-react"
+import { Trophy, Users, Clock, ArrowRight, RotateCcw, Timer, CheckCircle, XCircle } from "lucide-react"
 import { getFlagUrl, getFlagEmoji } from "@/lib/flag-utils"
 import { formatRemainingTime } from "@/lib/game-utils"
 
@@ -23,6 +23,7 @@ interface Player {
   username: string
   animal: string
   score: number
+  answers: { questionId: number; answer: string; correct: boolean; timeMs: number }[]
 }
 
 interface Game {
@@ -31,6 +32,7 @@ interface Game {
   players: Player[]
   currentQuestion: number
   quizId: string
+  endTime?: string
 }
 
 export default function HostPage() {
@@ -43,6 +45,7 @@ export default function HostPage() {
   const [showResults, setShowResults] = useState(false)
   const [gameFinished, setGameFinished] = useState(false)
   const [gameTimeRemaining, setGameTimeRemaining] = useState<string>("∞")
+  const [recentAnswers, setRecentAnswers] = useState<{player: Player, correct: boolean}[]>([])
 
   useEffect(() => {
     const fetchGameData = async () => {
@@ -61,6 +64,25 @@ export default function HostPage() {
           // Update game time remaining
           if (gameData.game.endTime) {
             setGameTimeRemaining(formatRemainingTime(new Date(gameData.game.endTime)))
+          }
+          
+          // Track recent answers
+          if (gameData.game.players) {
+            const newAnswers: {player: Player, correct: boolean}[] = []
+            gameData.game.players.forEach((player: Player) => {
+              const latestAnswer = player.answers[player.answers.length - 1]
+              if (latestAnswer && latestAnswer.questionId === gameData.game.currentQuestion) {
+                newAnswers.push({
+                  player,
+                  correct: latestAnswer.correct
+                })
+              }
+            })
+            
+            // Only update if we have new answers
+            if (newAnswers.length > 0) {
+              setRecentAnswers(newAnswers)
+            }
           }
         }
 
@@ -91,7 +113,7 @@ export default function HostPage() {
   }, [params.id])
 
   useEffect(() => {
-    // Completely new timer implementation
+    // Timer implementation
     if (!currentQuestion || !game || game.status !== 'playing' || showResults) return;
     
     // Set initial time from question
@@ -139,13 +161,13 @@ export default function HostPage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
         <div className="container mx-auto max-w-6xl">
-          <Card className="w-full shadow-lg">
-            <CardHeader className="text-center">
+          <Card className="w-full shadow-lg border-2 border-yellow-200">
+            <CardHeader className="text-center bg-gradient-to-r from-yellow-50 to-orange-50">
               <Trophy className="h-16 w-16 text-yellow-500 mx-auto mb-4" />
               <CardTitle className="text-4xl font-bold text-gray-900">Game Complete!</CardTitle>
               <p className="text-gray-600">Final Results</p>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-8">
               <div className="space-y-4">
                 <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">Final Leaderboard</h2>
                 <div className="grid gap-3">
@@ -233,18 +255,18 @@ export default function HostPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Question Display */}
-          <div className="lg:col-span-2">
-            <Card className="w-full shadow-lg">
-              <CardHeader>
+          <div className="lg:col-span-7">
+            <Card className="w-full shadow-lg border-2 border-blue-100">
+              <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50">
                 <Progress value={(timeLeft / currentQuestion.timeLimit) * 100} className="h-3 mb-4" />
                 <CardTitle className="text-2xl sm:text-3xl text-center text-gray-900">
                   {currentQuestion.question}
                 </CardTitle>
                 {currentQuestion.question.includes('flag') && (
                   <div className="mt-4 text-center">
-                    <div className="p-4 bg-gray-50 rounded-lg inline-block shadow-lg">
+                    <div className="p-4 bg-white rounded-lg inline-block shadow-lg">
                       <div className="h-48 w-full flex items-center justify-center mb-2">
                         <img 
                           src={getFlagUrl(currentQuestion.options[currentQuestion.correctAnswer])} 
@@ -257,7 +279,7 @@ export default function HostPage() {
                   </div>
                 )}
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                   {currentQuestion.options.map((option, index) => (
                     <div
@@ -265,7 +287,7 @@ export default function HostPage() {
                       className={`p-4 rounded-lg border-2 text-center font-medium shadow-sm ${
                         showResults && index === currentQuestion.correctAnswer
                           ? 'bg-green-100 border-green-400 text-green-800'
-                          : 'bg-gray-50 border-gray-200 text-gray-700'
+                          : 'bg-white border-gray-200 text-gray-700'
                       }`}
                     >
                       {option}
@@ -278,7 +300,7 @@ export default function HostPage() {
                     <Button 
                       onClick={nextQuestion} 
                       size="lg"
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg"
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg shadow-md"
                     >
                       <ArrowRight className="mr-2 h-6 w-6" />
                       Next Question
@@ -287,23 +309,54 @@ export default function HostPage() {
                 )}
               </CardContent>
             </Card>
+            
+            {/* Recent Answers */}
+            <Card className="w-full mt-4 shadow-md border-2 border-gray-100">
+              <CardHeader className="pb-2 bg-gradient-to-r from-gray-50 to-gray-100">
+                <CardTitle className="text-lg">Recent Answers</CardTitle>
+              </CardHeader>
+              <CardContent className="p-4">
+                {recentAnswers.length === 0 ? (
+                  <p className="text-center text-gray-500 py-2">No answers yet</p>
+                ) : (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    {recentAnswers.map((item, index) => (
+                      <div 
+                        key={index}
+                        className={`flex items-center gap-2 p-2 rounded-md ${
+                          item.correct ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'
+                        }`}
+                      >
+                        <span className="text-xl">{item.player.animal}</span>
+                        <span className="text-sm font-medium truncate">{item.player.username}</span>
+                        {item.correct ? (
+                          <CheckCircle className="h-4 w-4 text-green-500 ml-auto" />
+                        ) : (
+                          <XCircle className="h-4 w-4 text-red-500 ml-auto" />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </div>
 
           {/* Live Leaderboard */}
-          <div className="lg:col-span-1">
-            <Card className="w-full h-fit shadow-md">
-              <CardHeader>
+          <div className="lg:col-span-5">
+            <Card className="w-full h-fit shadow-lg border-2 border-blue-100">
+              <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50">
                 <CardTitle className="flex items-center gap-2">
                   <Trophy className="h-5 w-5 text-yellow-500" />
                   Live Leaderboard
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-2 max-h-96 overflow-y-auto">
+              <CardContent className="p-4">
+                <div className="space-y-2 max-h-[500px] overflow-y-auto">
                   {leaderboard.length === 0 ? (
                     <p className="text-center text-gray-500 py-4">No players have scored yet</p>
                   ) : (
-                    leaderboard.slice(0, 10).map((player, index) => (
+                    leaderboard.map((player, index) => (
                       <div
                         key={player.id}
                         className={`flex items-center justify-between p-3 rounded-lg shadow-sm ${
@@ -324,19 +377,6 @@ export default function HostPage() {
                       </div>
                     ))
                   )}
-                </div>
-                <div className="mt-4 text-center">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={() => {
-                      fetch(`/api/games/${params.id}/leaderboard`)
-                        .then(res => res.json())
-                        .then(data => setLeaderboard(data.leaderboard || []))
-                    }}
-                  >
-                    Refresh Leaderboard
-                  </Button>
                 </div>
               </CardContent>
             </Card>

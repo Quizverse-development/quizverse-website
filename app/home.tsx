@@ -10,6 +10,7 @@ import { PREMADE_QUIZZES } from "@/lib/game-store"
 import { ADDITIONAL_QUIZZES, getCategoryIcon } from "@/lib/quiz-utils"
 import { ENHANCED_QUIZZES } from "@/lib/enhanced-quizzes"
 import { Badge } from "@/components/ui/badge"
+import { Play, Users } from "lucide-react"
 
 // Combine all quizzes
 const allQuizzes = [...PREMADE_QUIZZES, ...ADDITIONAL_QUIZZES, ...ENHANCED_QUIZZES]
@@ -41,15 +42,23 @@ export function HomePage() {
       <section className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-bold">Play a Quiz</h2>
+            <h2 className="text-2xl font-bold text-blue-700">Play a Quiz</h2>
             <p className="text-muted-foreground">Join an existing game or create your own</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-3">
             <Button 
               onClick={() => setJoinDialogOpen(true)}
-              className="bg-blue-500 hover:bg-blue-600"
+              className="bg-blue-500 hover:bg-blue-600 px-6"
             >
+              <Users className="mr-2 h-4 w-4" />
               Join Game
+            </Button>
+            <Button 
+              onClick={() => createGame(allQuizzes[0].id)}
+              className="bg-purple-500 hover:bg-purple-600 px-6"
+            >
+              <Play className="mr-2 h-4 w-4" />
+              Host Game
             </Button>
             <JoinGameDialog open={joinDialogOpen} onOpenChange={setJoinDialogOpen} />
           </div>
@@ -57,32 +66,41 @@ export function HomePage() {
       </section>
       
       <section className="space-y-4">
-        <h2 className="text-2xl font-bold">Create a Game</h2>
+        <h2 className="text-2xl font-bold text-purple-700">Available Quizzes</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {allQuizzes.map((quiz) => (
-            <Card key={quiz.id} className="overflow-hidden transition-all hover:shadow-md">
-              <CardHeader className="pb-2">
+            <Card 
+              key={quiz.id} 
+              className="overflow-hidden transition-all hover:shadow-lg border-2 border-gray-100 hover:border-blue-100"
+            >
+              <CardHeader className="pb-2 bg-gradient-to-r from-blue-50 to-indigo-50">
                 <div className="flex justify-between items-start">
                   <div>
                     <CardTitle className="flex items-center gap-2">
-                      <span className="text-2xl">{getCategoryIcon(quiz.category)}</span>
-                      {quiz.title}
+                      <span className="text-3xl">{getCategoryIcon(quiz.category)}</span>
+                      <span className="text-blue-800">{quiz.title}</span>
                     </CardTitle>
-                    <CardDescription>{quiz.description}</CardDescription>
+                    <CardDescription className="font-medium text-gray-600">{quiz.description}</CardDescription>
                   </div>
-                  <Badge variant="outline">{quiz.category}</Badge>
+                  <Badge 
+                    variant="outline" 
+                    className="bg-white border-blue-200 text-blue-700 font-medium"
+                  >
+                    {quiz.category}
+                  </Badge>
                 </div>
               </CardHeader>
-              <CardContent className="pb-2">
-                <p className="text-sm text-muted-foreground">
+              <CardContent className="pb-2 pt-4">
+                <p className="text-sm font-medium text-blue-600">
                   {quiz.questions.length} questions
                 </p>
               </CardContent>
-              <CardFooter>
+              <CardFooter className="bg-gradient-to-r from-blue-50 to-indigo-50 pt-2">
                 <Button 
                   onClick={() => createGame(quiz.id)}
-                  className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600"
+                  className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 shadow-md"
                 >
+                  <Play className="mr-2 h-4 w-4" />
                   Host Game
                 </Button>
               </CardFooter>

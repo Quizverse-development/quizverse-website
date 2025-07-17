@@ -9,7 +9,7 @@ export default async function AdminPage() {
   const topUsers = getTopUsers()
   
   if (!session?.user?.isAdmin) {
-    redirect("/")
+    redirect("/admin/login")
   }
 
   return (
