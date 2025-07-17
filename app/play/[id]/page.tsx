@@ -149,6 +149,12 @@ export default function PlayPage() {
       fetch(`/api/games/${params.id}/leaderboard`)
         .then(res => res.json())
         .then(data => setLeaderboard(data.leaderboard || []))
+      
+      // Auto-advance to next question after a short delay
+      setTimeout(() => {
+        setSelectedAnswer("");
+        setShowResults(false);
+      }, 1000);
         
     } catch (error) {
       console.error('Failed to submit answer:', error)
@@ -350,18 +356,6 @@ export default function PlayPage() {
                   <span className="font-bold text-lg">
                     {isCorrect ? 'Correct!' : 'Incorrect'}
                   </span>
-                </div>
-                <div className="mt-4">
-                  <Button 
-                    onClick={() => {
-                      setSelectedAnswer("");
-                      setShowResults(false);
-                    }} 
-                    size="lg" 
-                    className="bg-blue-600 hover:bg-blue-700 transition-all px-8 py-6 text-lg shadow-md"
-                  >
-                    Next Question
-                  </Button>
                 </div>
               </div>
             )}
