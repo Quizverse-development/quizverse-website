@@ -95,7 +95,7 @@ export default function MobileHostPage() {
         <Card className="w-full max-w-md shadow-lg">
           <CardContent className="p-8 text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-lg">Loading game...</p>
+            <p className="text-lg text-black">Loading game...</p>
           </CardContent>
         </Card>
       </div>
@@ -103,16 +103,16 @@ export default function MobileHostPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4 w-full max-w-full">
-      <div className="w-full max-w-md mx-auto">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Game Lobby</h1>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-2 w-screen overflow-x-hidden">
+      <div className="w-full max-w-[95vw] mx-auto">
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-2xl font-bold text-black">Game Lobby</h1>
           <Badge variant="outline" className="text-sm">Mobile Host</Badge>
         </div>
         
-        <Card className="shadow-md mb-6">
+        <Card className="shadow-md mb-4">
           <CardHeader>
-            <CardTitle className="flex items-center justify-between">
+            <CardTitle className="flex items-center justify-between text-black">
               <span>Game Code</span>
               {game.status === 'lobby' && (
                 <Badge variant="secondary" className="text-lg px-3 py-1">
@@ -152,9 +152,9 @@ export default function MobileHostPage() {
         </Card>
         
         {game.status === 'lobby' && (
-          <Card className="shadow-md mb-6">
+          <Card className="shadow-md mb-4">
             <CardHeader>
-              <CardTitle>Game Settings</CardTitle>
+              <CardTitle className="text-black">Game Settings</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -168,7 +168,7 @@ export default function MobileHostPage() {
                     value={timeLimit} 
                     onChange={(e) => setTimeLimit(e.target.value)}
                   />
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-purple-700">
                     Players will have this much time to answer as many questions as possible.
                   </p>
                 </div>
@@ -177,9 +177,9 @@ export default function MobileHostPage() {
           </Card>
         )}
         
-        <Card className="shadow-md mb-6">
+        <Card className="shadow-md mb-4">
           <CardHeader>
-            <CardTitle className="flex items-center justify-between">
+            <CardTitle className="flex items-center justify-between text-black">
               <div className="flex items-center gap-2">
                 <Users className="h-5 w-5 text-blue-500" />
                 <span>Players</span>
@@ -229,7 +229,7 @@ export default function MobileHostPage() {
           )}
         </div>
         
-        <div className="mt-8 text-center">
+        <div className="mt-4 text-center">
           <Button variant="outline" onClick={() => router.push("/mobile")}>
             Back to Mobile Home
           </Button>

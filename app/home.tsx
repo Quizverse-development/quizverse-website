@@ -45,8 +45,8 @@ export function HomePage() {
       <section className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className={`text-2xl font-bold ${theme.textPrimary}`}>Play a Quiz</h2>
-            <p className="text-muted-foreground">Join an existing game or customize your experience</p>
+            <h2 className="text-2xl font-bold text-black">Play a Quiz</h2>
+            <p className="text-purple-700 font-medium">Join an existing game or customize your experience</p>
           </div>
           <div className="flex gap-3">
             <Button 
@@ -62,7 +62,7 @@ export function HomePage() {
       </section>
       
       <section className="space-y-4">
-        <h2 className={`text-2xl font-bold ${theme.textSecondary}`}>Available Quizzes</h2>
+        <h2 className="text-2xl font-bold text-black">Available Quizzes</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {allQuizzes.map((quiz) => (
             <Card 
@@ -73,10 +73,10 @@ export function HomePage() {
                 <div className="flex justify-between items-start">
                   <div>
                     <CardTitle className="flex items-center gap-2">
-                      <span className="text-3xl">{getCategoryIcon(quiz.category)}</span>
-                      <span className={theme.textPrimary}>{quiz.title}</span>
+                      <span className="text-3xl bg-white rounded-full p-1">{getCategoryIcon(quiz.category)}</span>
+                      <span className="text-black">{quiz.title}</span>
                     </CardTitle>
-                    <CardDescription className="font-medium text-gray-600">{quiz.description}</CardDescription>
+                    <CardDescription className="font-medium text-purple-700">{quiz.description}</CardDescription>
                   </div>
                   <Badge 
                     variant="outline" 
@@ -87,7 +87,7 @@ export function HomePage() {
                 </div>
               </CardHeader>
               <CardContent className="pb-2 pt-4">
-                <p className="text-sm font-medium text-blue-600">
+                <p className="text-sm font-medium text-black">
                   {quiz.questions.length} questions
                 </p>
               </CardContent>
@@ -108,14 +108,14 @@ export function HomePage() {
       <section className="pt-4 pb-8">
         <Card className={`bg-gradient-to-r ${theme.cardGradient} border-none shadow-md`}>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-black">
               <Settings className="h-5 w-5" />
               <span>Customize Your Experience</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="mb-4">Change the look and feel of QuizVerse by selecting different color themes.</p>
-            <p>Click the palette icon <span className="inline-block p-1 bg-white rounded-full"><Settings className="h-4 w-4 inline" /></span> in the header to choose from our fun theme options!</p>
+            <p className="mb-4 text-black">Change the look and feel of QuizVerse by selecting different color themes.</p>
+            <p className="text-black">Click the palette icon <span className="inline-block p-1 bg-white rounded-full"><Settings className="h-4 w-4 inline" /></span> in the header to choose from our fun theme options!</p>
           </CardContent>
         </Card>
       </section>

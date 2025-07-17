@@ -94,12 +94,12 @@ export default function MobilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4 w-full max-w-full">
-      <div className="w-full max-w-md mx-auto">
-        <div className="flex justify-center mb-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-2 w-screen overflow-x-hidden">
+      <div className="w-full max-w-[95vw] mx-auto">
+        <div className="flex justify-center mb-4">
           <div className="flex items-center gap-2">
             <Smartphone className="h-6 w-6 text-blue-600" />
-            <h1 className="text-2xl font-bold text-center">QuizVerse Mobile</h1>
+            <h1 className="text-2xl font-bold text-center text-black">QuizVerse Mobile</h1>
           </div>
         </div>
         
@@ -112,7 +112,7 @@ export default function MobilePage() {
           <TabsContent value="join">
             <Card className="shadow-md">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-black">
                   <Users className="h-5 w-5 text-blue-500" />
                   Join a Game
                 </CardTitle>
@@ -163,7 +163,7 @@ export default function MobilePage() {
           <TabsContent value="host">
             <Card className="shadow-md">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-black">
                   <Play className="h-5 w-5 text-blue-500" />
                   Host a Game
                 </CardTitle>
@@ -221,7 +221,7 @@ export default function MobilePage() {
           </TabsContent>
         </Tabs>
         
-        <div className="mt-8 text-center">
+        <div className="mt-4 text-center">
           <Button variant="outline" onClick={() => router.push("/")}>
             Back to Desktop Version
           </Button>

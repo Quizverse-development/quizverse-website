@@ -82,7 +82,13 @@ export function isUsernameValid(username: string): boolean {
 }
 
 export function generateGameCode(): string {
-  return Math.random().toString(36).substring(2, 8).toUpperCase()
+  // Generate a more reliable 6-character code
+  const characters = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Removed similar looking characters
+  let result = '';
+  for (let i = 0; i < 6; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
 }
 
 export function createGame(hostId: string, quizId: string, timeLimit?: number): Game {
@@ -106,7 +112,9 @@ export function getGame(gameId: string): Game | undefined {
 }
 
 export function getGameByCode(code: string): Game | undefined {
-  return Array.from(games.values()).find(game => game.code === code)
+  // Make code comparison case-insensitive
+  const upperCode = code.toUpperCase();
+  return Array.from(games.values()).find(game => game.code === upperCode);
 }
 
 export function joinGame(code: string, username: string, animal: string): { success: boolean; game?: Game; player?: Player; error?: string } {

@@ -92,11 +92,12 @@ export default function PlayPage() {
           const questionData = await questionResponse.json()
           
           if (questionData.question) {
-            // Check if this is a new question
-            if (!currentQuestion || questionData.question.id !== currentQuestion.id) {
-              setCurrentQuestion(questionData.question)
+            // Always update the current question
+            setCurrentQuestion(questionData.question)
+            
+            // Only reset answer if we're not showing results
+            if (!showResults) {
               setSelectedAnswer("")
-              setShowResults(false)
             }
           }
         }
@@ -109,7 +110,7 @@ export default function PlayPage() {
     fetchGameData()
     const interval = setInterval(fetchGameData, 1000)
     return () => clearInterval(interval)
-  }, [params.id, currentQuestion])
+  }, [params.id, showResults])
 
   // Redirect timer for game finished state
   useEffect(() => {
@@ -150,7 +151,7 @@ export default function PlayPage() {
         .then(res => res.json())
         .then(data => setLeaderboard(data.leaderboard || []))
       
-      // Auto-advance to next question immediately
+      // Auto-advance to next question after a short delay
       setTimeout(() => {
         setSelectedAnswer("");
         setShowResults(false);

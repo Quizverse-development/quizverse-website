@@ -30,3 +30,9 @@ export function formatRemainingTime(endTime: Date | undefined): string {
   
   return `${diffMinutes}:${diffSeconds.toString().padStart(2, '0')}`;
 }
+
+// Get quiz by ID from all available quizzes
+export function getQuizById(quizId: string) {
+  const allQuizzes = getAllQuizzes();
+  return allQuizzes.find(quiz => quiz.id === quizId);
+}
