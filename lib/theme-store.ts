@@ -20,7 +20,7 @@ export const THEMES: Theme[] = [
     bgGradient: 'from-blue-50 to-indigo-50',
     cardGradient: 'from-blue-50 to-indigo-50',
     buttonGradient: 'from-blue-500 to-purple-500',
-    textPrimary: 'text-blue-700',
+    textPrimary: 'text-black',
     textSecondary: 'text-purple-700'
   },
   {
@@ -30,7 +30,7 @@ export const THEMES: Theme[] = [
     bgGradient: 'from-orange-50 to-pink-50',
     cardGradient: 'from-orange-50 to-pink-50',
     buttonGradient: 'from-orange-500 to-pink-500',
-    textPrimary: 'text-orange-700',
+    textPrimary: 'text-black',
     textSecondary: 'text-pink-700'
   },
   {
@@ -40,7 +40,7 @@ export const THEMES: Theme[] = [
     bgGradient: 'from-green-50 to-teal-50',
     cardGradient: 'from-green-50 to-teal-50',
     buttonGradient: 'from-green-500 to-teal-500',
-    textPrimary: 'text-green-700',
+    textPrimary: 'text-black',
     textSecondary: 'text-teal-700'
   },
   {
@@ -50,7 +50,7 @@ export const THEMES: Theme[] = [
     bgGradient: 'from-purple-50 to-blue-50',
     cardGradient: 'from-purple-50 to-blue-50',
     buttonGradient: 'from-purple-500 to-blue-500',
-    textPrimary: 'text-purple-700',
+    textPrimary: 'text-black',
     textSecondary: 'text-blue-700'
   },
   {
@@ -60,7 +60,7 @@ export const THEMES: Theme[] = [
     bgGradient: 'from-pink-50 to-blue-50',
     cardGradient: 'from-pink-50 to-blue-50',
     buttonGradient: 'from-pink-500 to-blue-500',
-    textPrimary: 'text-pink-700',
+    textPrimary: 'text-black',
     textSecondary: 'text-blue-700'
   }
 ];

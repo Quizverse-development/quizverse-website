@@ -21,7 +21,7 @@ const ThemeContext = createContext<ThemeContextType>({
   bgGradient: 'from-blue-50 to-indigo-50',
   cardGradient: 'from-blue-50 to-indigo-50',
   buttonGradient: 'from-blue-500 to-purple-500',
-  textPrimary: 'text-blue-700',
+  textPrimary: 'text-black',
   textSecondary: 'text-purple-700'
 })
 
@@ -32,7 +32,7 @@ export function ThemeProviderCustom({ children }: ThemeProviderProps) {
     bgGradient: 'from-blue-50 to-indigo-50',
     cardGradient: 'from-blue-50 to-indigo-50',
     buttonGradient: 'from-blue-500 to-purple-500',
-    textPrimary: 'text-blue-700',
+    textPrimary: 'text-black',
     textSecondary: 'text-purple-700'
   })
   
