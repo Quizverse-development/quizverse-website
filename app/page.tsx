@@ -29,40 +29,40 @@ export default function MainPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-              <Card className="text-center border-blue-100 bg-white shadow-sm">
+              <Card className="text-center border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50 shadow-md hover:shadow-lg transition-all">
                 <CardHeader>
-                  <Play className="h-12 w-12 text-blue-600 mx-auto mb-2" />
-                  <CardTitle>Host Games</CardTitle>
+                  <Play className="h-12 w-12 text-purple-600 mx-auto mb-2" />
+                  <CardTitle className="text-purple-700">Host Games</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">Create and host live quiz games with real-time participation</p>
+                  <p className="text-gray-700">Create and host live quiz games with real-time participation</p>
                 </CardContent>
               </Card>
 
-              <Card className="text-center border-blue-100 bg-white shadow-sm">
+              <Card className="text-center border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50 shadow-md hover:shadow-lg transition-all">
                 <CardHeader>
-                  <Users className="h-12 w-12 text-blue-600 mx-auto mb-2" />
-                  <CardTitle>Join Games</CardTitle>
+                  <Users className="h-12 w-12 text-purple-600 mx-auto mb-2" />
+                  <CardTitle className="text-purple-700">Join Games</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">Enter a game code and compete with others in real-time</p>
+                  <p className="text-gray-700">Enter a game code and compete with others in real-time</p>
                 </CardContent>
               </Card>
 
-              <Card className="text-center border-blue-100 bg-white shadow-sm">
+              <Card className="text-center border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50 shadow-md hover:shadow-lg transition-all">
                 <CardHeader>
-                  <Trophy className="h-12 w-12 text-blue-600 mx-auto mb-2" />
-                  <CardTitle>Create Quizzes</CardTitle>
+                  <Trophy className="h-12 w-12 text-purple-600 mx-auto mb-2" />
+                  <CardTitle className="text-purple-700">Create Quizzes</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">Build custom quizzes with multiple choice questions</p>
+                  <p className="text-gray-700">Build custom quizzes with multiple choice questions</p>
                 </CardContent>
               </Card>
             </div>
 
             <div className="space-y-4">
               <p className="text-lg text-gray-700">Sign in to create and join quiz games</p>
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700" asChild>
+              <Button size="lg" className="bg-purple-600 hover:bg-purple-700" asChild>
                 <Link href="/auth/signin">
                   <Zap className="mr-2 h-5 w-5" />
                   Sign In
