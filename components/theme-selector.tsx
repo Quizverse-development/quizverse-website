@@ -13,8 +13,13 @@ export function ThemeSelector() {
   
   useEffect(() => {
     // Load theme preference on mount
-    const savedTheme = getThemePreference()
-    setCurrentTheme(savedTheme)
+    try {
+      const savedTheme = getThemePreference()
+      setCurrentTheme(savedTheme)
+    } catch (error) {
+      console.error('Error loading theme preference:', error)
+      // Keep default theme if there's an error
+    }
   }, [])
   
   const handleThemeChange = (themeId: string) => {

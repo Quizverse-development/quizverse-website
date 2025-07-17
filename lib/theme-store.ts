@@ -76,14 +76,23 @@ const THEME_STORAGE_KEY = 'quizverse-theme';
 // Save theme preference to local storage
 export function saveThemePreference(themeId: string): void {
   if (typeof window !== 'undefined') {
-    localStorage.setItem(THEME_STORAGE_KEY, themeId);
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, themeId);
+    } catch (error) {
+      console.error('Error saving theme to localStorage:', error);
+    }
   }
 }
 
 // Get theme preference from local storage
 export function getThemePreference(): string {
   if (typeof window !== 'undefined') {
-    return localStorage.getItem(THEME_STORAGE_KEY) || 'default';
+    try {
+      return localStorage.getItem(THEME_STORAGE_KEY) || 'default';
+    } catch (error) {
+      console.error('Error accessing localStorage:', error);
+      return 'default';
+    }
   }
   return 'default';
 }

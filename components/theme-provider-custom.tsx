@@ -38,17 +38,22 @@ export function ThemeProviderCustom({ children }: ThemeProviderProps) {
   
   useEffect(() => {
     setMounted(true)
-    const savedTheme = getThemePreference()
-    const themeData = getTheme(savedTheme)
-    
-    setThemeState({
-      theme: themeData.id,
-      bgGradient: themeData.bgGradient,
-      cardGradient: themeData.cardGradient,
-      buttonGradient: themeData.buttonGradient,
-      textPrimary: themeData.textPrimary,
-      textSecondary: themeData.textSecondary
-    })
+    try {
+      const savedTheme = getThemePreference()
+      const themeData = getTheme(savedTheme)
+      
+      setThemeState({
+        theme: themeData.id,
+        bgGradient: themeData.bgGradient,
+        cardGradient: themeData.cardGradient,
+        buttonGradient: themeData.buttonGradient,
+        textPrimary: themeData.textPrimary,
+        textSecondary: themeData.textSecondary
+      })
+    } catch (error) {
+      console.error('Error loading theme:', error)
+      // Keep default theme if there's an error
+    }
   }, [])
   
   if (!mounted) {
