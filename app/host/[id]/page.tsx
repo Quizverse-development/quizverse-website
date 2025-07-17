@@ -5,9 +5,8 @@ import { useParams, useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
-import { Trophy, Users, Clock, ArrowRight, RotateCcw, Timer, CheckCircle, XCircle } from "lucide-react"
-import { getFlagUrl, getFlagEmoji } from "@/lib/flag-utils"
+import { Trophy, Users, ArrowRight, RotateCcw, Timer, CheckCircle, XCircle } from "lucide-react"
+import { getFlagUrl } from "@/lib/flag-utils"
 import { formatRemainingTime } from "@/lib/game-utils"
 
 interface Question {
@@ -41,7 +40,6 @@ export default function HostPage() {
   const [game, setGame] = useState<Game | null>(null)
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null)
   const [leaderboard, setLeaderboard] = useState<Player[]>([])
-  const [timeLeft, setTimeLeft] = useState(20)
   const [showResults, setShowResults] = useState(false)
   const [gameFinished, setGameFinished] = useState(false)
   const [gameTimeRemaining, setGameTimeRemaining] = useState<string>("∞")
@@ -93,7 +91,6 @@ export default function HostPage() {
           
           if (questionData.question) {
             setCurrentQuestion(questionData.question)
-            setTimeLeft(questionData.question.timeLimit)
           }
         }
 
@@ -112,33 +109,6 @@ export default function HostPage() {
     return () => clearInterval(interval)
   }, [params.id])
 
-  useEffect(() => {
-    // Timer implementation
-    if (!currentQuestion || !game || game.status !== 'playing' || showResults) return;
-    
-    // Set initial time from question
-    setTimeLeft(currentQuestion.timeLimit);
-    
-    // Use Date.now() to track elapsed time precisely
-    const startTime = Date.now();
-    const totalTime = currentQuestion.timeLimit * 1000;
-    
-    const timer = setInterval(() => {
-      const elapsed = Date.now() - startTime;
-      const remaining = Math.max(0, Math.ceil((totalTime - elapsed) / 1000));
-      
-      if (remaining <= 0) {
-        clearInterval(timer);
-        setTimeLeft(0);
-        setShowResults(true);
-      } else {
-        setTimeLeft(remaining);
-      }
-    }, 250); // Update more frequently for smoother countdown
-    
-    return () => clearInterval(timer);
-  }, [currentQuestion?.id, game?.status, showResults]) // Only depend on these specific properties
-
   const nextQuestion = async () => {
     try {
       const response = await fetch(`/api/games/${params.id}/next`, {
@@ -150,7 +120,6 @@ export default function HostPage() {
         setGameFinished(true)
       } else {
         setShowResults(false)
-        setTimeLeft(20)
       }
     } catch (error) {
       console.error('Failed to advance question:', error)
@@ -159,17 +128,17 @@ export default function HostPage() {
 
   if (gameFinished) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4 w-screen overflow-x-hidden">
         <div className="container mx-auto max-w-6xl">
           <Card className="w-full shadow-lg border-2 border-yellow-200">
             <CardHeader className="text-center bg-gradient-to-r from-yellow-50 to-orange-50">
               <Trophy className="h-16 w-16 text-yellow-500 mx-auto mb-4" />
-              <CardTitle className="text-4xl font-bold text-gray-900">Game Complete!</CardTitle>
-              <p className="text-gray-600">Final Results</p>
+              <CardTitle className="text-4xl font-bold text-black">Game Complete!</CardTitle>
+              <p className="text-purple-700">Final Results</p>
             </CardHeader>
             <CardContent className="p-8">
               <div className="space-y-4">
-                <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">Final Leaderboard</h2>
+                <h2 className="text-2xl font-semibold text-center text-black mb-6">Final Leaderboard</h2>
                 <div className="grid gap-3">
                   {leaderboard.map((player, index) => (
                     <div
@@ -191,7 +160,7 @@ export default function HostPage() {
                           #{index + 1}
                         </div>
                         <span className="text-3xl">{player.animal}</span>
-                        <span className="text-xl font-medium">{player.username}</span>
+                        <span className="text-xl font-medium text-black">{player.username}</span>
                       </div>
                       <Badge variant="secondary" className="text-xl px-4 py-2">
                         {player.score} pts
@@ -216,11 +185,11 @@ export default function HostPage() {
 
   if (!game || !currentQuestion) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center p-4 w-screen overflow-x-hidden">
         <Card className="w-full max-w-md shadow-lg">
           <CardContent className="p-8 text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-lg">Loading game...</p>
+            <p className="text-lg text-black">Loading game...</p>
           </CardContent>
         </Card>
       </div>
@@ -228,7 +197,7 @@ export default function HostPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4 w-screen overflow-x-hidden">
       <div className="container mx-auto max-w-7xl">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
@@ -244,11 +213,6 @@ export default function HostPage() {
           
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 bg-white rounded-lg px-4 py-2 shadow-md">
-              <Clock className="h-5 w-5 text-red-500" />
-              <span className="text-xl font-bold text-red-500">{timeLeft}s</span>
-            </div>
-            
-            <div className="flex items-center gap-2 bg-white rounded-lg px-4 py-2 shadow-md">
               <Timer className="h-5 w-5 text-blue-500" />
               <span className="text-xl font-bold text-blue-500">{gameTimeRemaining}</span>
             </div>
@@ -260,8 +224,7 @@ export default function HostPage() {
           <div className="lg:col-span-7">
             <Card className="w-full shadow-lg border-2 border-blue-100">
               <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50">
-                <Progress value={(timeLeft / currentQuestion.timeLimit) * 100} className="h-3 mb-4" />
-                <CardTitle className="text-2xl sm:text-3xl text-center text-gray-900">
+                <CardTitle className="text-2xl sm:text-3xl text-center text-black">
                   {currentQuestion.question}
                 </CardTitle>
                 {currentQuestion.question.includes('flag') && (
@@ -274,7 +237,7 @@ export default function HostPage() {
                           className="max-h-40 border border-gray-200 rounded-md shadow-md" 
                         />
                       </div>
-                      <p className="text-sm text-gray-600 font-medium">Flag of {currentQuestion.options[currentQuestion.correctAnswer]}</p>
+                      <p className="text-sm text-purple-700 font-medium">Flag of {currentQuestion.options[currentQuestion.correctAnswer]}</p>
                     </div>
                   </div>
                 )}
@@ -287,7 +250,7 @@ export default function HostPage() {
                       className={`p-4 rounded-lg border-2 text-center font-medium shadow-sm ${
                         showResults && index === currentQuestion.correctAnswer
                           ? 'bg-green-100 border-green-400 text-green-800'
-                          : 'bg-white border-gray-200 text-gray-700'
+                          : 'bg-white border-gray-200 text-black'
                       }`}
                     >
                       {option}
@@ -295,29 +258,27 @@ export default function HostPage() {
                   ))}
                 </div>
                 
-                {showResults && (
-                  <div className="text-center">
-                    <Button 
-                      onClick={nextQuestion} 
-                      size="lg"
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg shadow-md"
-                    >
-                      <ArrowRight className="mr-2 h-6 w-6" />
-                      Next Question
-                    </Button>
-                  </div>
-                )}
+                <div className="text-center">
+                  <Button 
+                    onClick={nextQuestion} 
+                    size="lg"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg shadow-md"
+                  >
+                    <ArrowRight className="mr-2 h-6 w-6" />
+                    Next Question
+                  </Button>
+                </div>
               </CardContent>
             </Card>
             
             {/* Recent Answers */}
             <Card className="w-full mt-4 shadow-md border-2 border-gray-100">
               <CardHeader className="pb-2 bg-gradient-to-r from-gray-50 to-gray-100">
-                <CardTitle className="text-lg">Recent Answers</CardTitle>
+                <CardTitle className="text-lg text-black">Recent Answers</CardTitle>
               </CardHeader>
               <CardContent className="p-4">
                 {recentAnswers.length === 0 ? (
-                  <p className="text-center text-gray-500 py-2">No answers yet</p>
+                  <p className="text-center text-purple-700 py-2">No answers yet</p>
                 ) : (
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                     {recentAnswers.map((item, index) => (
@@ -328,7 +289,7 @@ export default function HostPage() {
                         }`}
                       >
                         <span className="text-xl">{item.player.animal}</span>
-                        <span className="text-sm font-medium truncate">{item.player.username}</span>
+                        <span className="text-sm font-medium truncate text-black">{item.player.username}</span>
                         {item.correct ? (
                           <CheckCircle className="h-4 w-4 text-green-500 ml-auto" />
                         ) : (
@@ -346,7 +307,7 @@ export default function HostPage() {
           <div className="lg:col-span-5">
             <Card className="w-full h-fit shadow-lg border-2 border-blue-100">
               <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50">
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-black">
                   <Trophy className="h-5 w-5 text-yellow-500" />
                   Live Leaderboard
                 </CardTitle>
@@ -354,7 +315,7 @@ export default function HostPage() {
               <CardContent className="p-4">
                 <div className="space-y-2 max-h-[500px] overflow-y-auto">
                   {leaderboard.length === 0 ? (
-                    <p className="text-center text-gray-500 py-4">No players have scored yet</p>
+                    <p className="text-center text-purple-700 py-4">No players have scored yet</p>
                   ) : (
                     leaderboard.map((player, index) => (
                       <div
@@ -367,9 +328,9 @@ export default function HostPage() {
                         }`}
                       >
                         <div className="flex items-center gap-2">
-                          <span className="text-sm font-bold">#{index + 1}</span>
+                          <span className="text-sm font-bold text-black">#{index + 1}</span>
                           <span className="text-lg">{player.animal}</span>
-                          <span className="text-sm font-medium truncate">{player.username}</span>
+                          <span className="text-sm font-medium truncate text-black">{player.username}</span>
                         </div>
                         <Badge variant="secondary" className="text-xs px-2 py-1">
                           {player.score} pts

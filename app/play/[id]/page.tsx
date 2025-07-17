@@ -102,6 +102,13 @@ export default function PlayPage() {
           }
         }
         
+        // Always fetch leaderboard for playing games
+        if (gameData.game?.status === 'playing') {
+          const leaderResponse = await fetch(`/api/games/${params.id}/leaderboard`)
+          const leaderData = await leaderResponse.json()
+          setLeaderboard(leaderData.leaderboard || [])
+        }
+        
       } catch (error) {
         console.error('Failed to fetch game data:', error)
       }
@@ -167,30 +174,30 @@ export default function PlayPage() {
     const playerScore = leaderboard.find(p => p.id === player?.id)?.score || 0
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4 w-screen overflow-x-hidden">
         <div className="container mx-auto max-w-4xl">
           <Card className="w-full shadow-lg border-2 border-yellow-200">
             <CardContent className="p-8 text-center">
               <Trophy className="h-16 w-16 text-yellow-500 mx-auto mb-4" />
-              <h1 className="text-4xl font-bold text-gray-900 mb-2">Game Over!</h1>
-              <p className="text-sm text-gray-500 mb-4">Redirecting to home in {redirectTimer} seconds...</p>
+              <h1 className="text-4xl font-bold text-black mb-2">Game Over!</h1>
+              <p className="text-sm text-purple-700 mb-4">Redirecting to home in {redirectTimer} seconds...</p>
               
               {player && (
                 <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 mb-6 shadow-md border-2 border-blue-200">
                   <div className="flex items-center justify-center gap-3 mb-4">
                     <span className="text-4xl">{player.animal}</span>
-                    <span className="text-2xl font-bold">{player.username}</span>
+                    <span className="text-2xl font-bold text-black">{player.username}</span>
                   </div>
                   <div className="text-center">
-                    <p className="text-lg text-gray-600">Your Rank</p>
+                    <p className="text-lg text-purple-700">Your Rank</p>
                     <p className="text-4xl font-bold text-blue-600">#{playerRank}</p>
-                    <p className="text-lg text-gray-600 mt-2">Final Score: {playerScore} points</p>
+                    <p className="text-lg text-purple-700 mt-2">Final Score: {playerScore} points</p>
                   </div>
                 </div>
               )}
               
               <div className="space-y-3 mb-6">
-                <h2 className="text-xl font-semibold text-gray-800">Top 5 Players</h2>
+                <h2 className="text-xl font-semibold text-black">Top 5 Players</h2>
                 {leaderboard.slice(0, 5).map((p, index) => (
                   <div
                     key={p.id}
@@ -201,9 +208,9 @@ export default function PlayPage() {
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <span className="text-lg font-bold">#{index + 1}</span>
+                      <span className="text-lg font-bold text-black">#{index + 1}</span>
                       <span className="text-2xl">{p.animal}</span>
-                      <span className="font-medium">{p.username}</span>
+                      <span className="font-medium text-black">{p.username}</span>
                     </div>
                     <Badge variant="secondary" className="px-2 py-1">{p.score} pts</Badge>
                   </div>
@@ -222,12 +229,12 @@ export default function PlayPage() {
 
   if (!game || game.status === 'lobby') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center p-4 w-screen overflow-x-hidden">
         <Card className="w-full max-w-lg shadow-lg border-2 border-blue-100">
           <CardContent className="p-8 text-center space-y-6">
             <div className="space-y-2">
-              <h1 className="text-3xl font-bold text-gray-900">Waiting for Game</h1>
-              <p className="text-gray-600">The host will start the game soon</p>
+              <h1 className="text-3xl font-bold text-black">Waiting for Game</h1>
+              <p className="text-purple-700">The host will start the game soon</p>
             </div>
 
             <div className="flex justify-center">
@@ -240,10 +247,10 @@ export default function PlayPage() {
 
             {player && (
               <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 shadow-md border border-blue-200">
-                <p className="text-sm text-gray-600 mb-2">You are playing as:</p>
+                <p className="text-sm text-purple-700 mb-2">You are playing as:</p>
                 <div className="flex items-center justify-center gap-3">
                   <span className="text-3xl">{player.animal}</span>
-                  <span className="text-xl font-medium">{player.username}</span>
+                  <span className="text-xl font-medium text-black">{player.username}</span>
                 </div>
               </div>
             )}
@@ -255,11 +262,11 @@ export default function PlayPage() {
 
   if (!currentQuestion) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center p-4 w-screen overflow-x-hidden">
         <Card className="w-full max-w-md shadow-lg">
           <CardContent className="p-8 text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-lg">Loading question...</p>
+            <p className="text-lg text-black">Loading question...</p>
           </CardContent>
         </Card>
       </div>
@@ -267,7 +274,7 @@ export default function PlayPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-100 to-indigo-100 p-4">
+    <div className="min-h-screen bg-gradient-to-r from-blue-100 to-indigo-100 p-4 w-screen overflow-x-hidden">
       <div className="container mx-auto max-w-4xl">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
@@ -292,7 +299,7 @@ export default function PlayPage() {
         {/* Question Card */}
         <Card className="w-full mb-6 shadow-lg border-2 border-blue-200">
           <CardContent className="p-8 bg-gradient-to-r from-blue-50 to-indigo-50">
-            <h1 className="text-2xl sm:text-3xl font-bold text-center text-blue-800 mb-8">
+            <h1 className="text-2xl sm:text-3xl font-bold text-center text-black mb-8">
               {currentQuestion.question}
             </h1>
             
@@ -306,7 +313,7 @@ export default function PlayPage() {
                       className="max-h-40 border border-gray-200 rounded-md shadow-md" 
                     />
                   </div>
-                  <p className="text-sm text-gray-600 font-medium">Choose the correct country for this flag</p>
+                  <p className="text-sm text-purple-700 font-medium">Choose the correct country for this flag</p>
                 </div>
               </div>
             )}
@@ -323,7 +330,7 @@ export default function PlayPage() {
                       ? 'bg-red-500 hover:bg-red-600 text-white border-red-500'
                       : selectedAnswer === option
                       ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                      : 'bg-white hover:bg-gray-50 border-2 border-blue-200'
+                      : 'bg-white hover:bg-gray-50 border-2 border-blue-200 text-black'
                   }`}
                   onClick={() => !showResults && setSelectedAnswer(option)}
                 >
@@ -367,7 +374,7 @@ export default function PlayPage() {
         {leaderboard.length > 0 && (
           <Card className="w-full shadow-md border-2 border-blue-100">
             <CardContent className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50">
-              <h3 className="font-medium mb-2 flex items-center">
+              <h3 className="font-medium mb-2 flex items-center text-black">
                 <Trophy className="h-4 w-4 text-yellow-500 mr-1" />
                 Top 3 Players
               </h3>
@@ -375,9 +382,9 @@ export default function PlayPage() {
                 {leaderboard.slice(0, 3).map((p, index) => (
                   <div key={p.id} className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold">#{index + 1}</span>
+                      <span className="font-bold text-black">#{index + 1}</span>
                       <span>{p.animal}</span>
-                      <span>{p.username}</span>
+                      <span className="text-black">{p.username}</span>
                     </div>
                     <Badge variant="secondary">{p.score} pts</Badge>
                   </div>
