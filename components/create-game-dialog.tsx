@@ -53,7 +53,7 @@ export function CreateGameDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="w-full bg-blue-600 hover:bg-blue-700">Host a Game</Button>
+        <Button className="bg-blue-600 hover:bg-blue-700">Host Game</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

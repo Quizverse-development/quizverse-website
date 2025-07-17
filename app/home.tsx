@@ -5,12 +5,11 @@ import { useRouter } from "next/navigation"
 import { useSession } from "@/components/auth-provider"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { JoinGameDialog } from "@/components/join-game-dialog"
 import { PREMADE_QUIZZES } from "@/lib/game-store"
 import { ADDITIONAL_QUIZZES, getCategoryIcon } from "@/lib/quiz-utils"
 import { ENHANCED_QUIZZES } from "@/lib/enhanced-quizzes"
 import { Badge } from "@/components/ui/badge"
-import { Play, Users, Settings } from "lucide-react"
+import { Play, Settings } from "lucide-react"
 import { useTheme } from "@/components/theme-provider-custom"
 import Link from "next/link"
 
@@ -20,7 +19,6 @@ const allQuizzes = [...PREMADE_QUIZZES, ...ADDITIONAL_QUIZZES, ...ENHANCED_QUIZZ
 export function HomePage() {
   const router = useRouter()
   const { data: session } = useSession()
-  const [joinDialogOpen, setJoinDialogOpen] = useState(false)
   const theme = useTheme()
   
   const createGame = async (quizId: string) => {
@@ -46,17 +44,7 @@ export function HomePage() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h2 className="text-2xl font-bold text-black">Play a Quiz</h2>
-            <p className="text-purple-700 font-medium">Join an existing game or customize your experience</p>
-          </div>
-          <div className="flex gap-3">
-            <Button 
-              onClick={() => setJoinDialogOpen(true)}
-              className={`bg-gradient-to-r ${theme.buttonGradient} hover:opacity-90 px-6`}
-            >
-              <Users className="mr-2 h-4 w-4" />
-              Join Game
-            </Button>
-            <JoinGameDialog open={joinDialogOpen} onOpenChange={setJoinDialogOpen} />
+            <p className="text-purple-700 font-medium">Select a quiz from below to get started</p>
           </div>
         </div>
       </section>

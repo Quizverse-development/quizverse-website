@@ -7,6 +7,7 @@ import { CreateGameDialog } from "@/components/create-game-dialog"
 import { Button } from "@/components/ui/button"
 import { useSession } from "@/components/auth-provider"
 import { ThemeSelector } from "@/components/theme-selector"
+import { Play, Users } from "lucide-react"
 
 export function Header() {
   const { data: session } = useSession()
@@ -34,9 +35,8 @@ export function Header() {
       <div className="flex items-center gap-1 sm:gap-2">
         {session && (
           <>
-            <div className="hidden sm:block">
-              <JoinGameDialog />
-            </div>
+            <CreateGameDialog />
+            <JoinGameDialog />
           </>
         )}
         <ThemeSelector />
