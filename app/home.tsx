@@ -10,7 +10,9 @@ import { PREMADE_QUIZZES } from "@/lib/game-store"
 import { ADDITIONAL_QUIZZES, getCategoryIcon } from "@/lib/quiz-utils"
 import { ENHANCED_QUIZZES } from "@/lib/enhanced-quizzes"
 import { Badge } from "@/components/ui/badge"
-import { Play, Users } from "lucide-react"
+import { Play, Users, Settings } from "lucide-react"
+import { useTheme } from "@/components/theme-provider-custom"
+import Link from "next/link"
 
 // Combine all quizzes
 const allQuizzes = [...PREMADE_QUIZZES, ...ADDITIONAL_QUIZZES, ...ENHANCED_QUIZZES]
@@ -19,6 +21,7 @@ export function HomePage() {
   const router = useRouter()
   const { data: session } = useSession()
   const [joinDialogOpen, setJoinDialogOpen] = useState(false)
+  const theme = useTheme()
   
   const createGame = async (quizId: string) => {
     try {
@@ -42,23 +45,16 @@ export function HomePage() {
       <section className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-bold text-blue-700">Play a Quiz</h2>
-            <p className="text-muted-foreground">Join an existing game or create your own</p>
+            <h2 className={`text-2xl font-bold ${theme.textPrimary}`}>Play a Quiz</h2>
+            <p className="text-muted-foreground">Join an existing game or customize your experience</p>
           </div>
           <div className="flex gap-3">
             <Button 
               onClick={() => setJoinDialogOpen(true)}
-              className="bg-blue-500 hover:bg-blue-600 px-6"
+              className={`bg-gradient-to-r ${theme.buttonGradient} hover:opacity-90 px-6`}
             >
               <Users className="mr-2 h-4 w-4" />
               Join Game
-            </Button>
-            <Button 
-              onClick={() => createGame(allQuizzes[0].id)}
-              className="bg-purple-500 hover:bg-purple-600 px-6"
-            >
-              <Play className="mr-2 h-4 w-4" />
-              Host Game
             </Button>
             <JoinGameDialog open={joinDialogOpen} onOpenChange={setJoinDialogOpen} />
           </div>
@@ -66,19 +62,19 @@ export function HomePage() {
       </section>
       
       <section className="space-y-4">
-        <h2 className="text-2xl font-bold text-purple-700">Available Quizzes</h2>
+        <h2 className={`text-2xl font-bold ${theme.textSecondary}`}>Available Quizzes</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {allQuizzes.map((quiz) => (
             <Card 
               key={quiz.id} 
               className="overflow-hidden transition-all hover:shadow-lg border-2 border-gray-100 hover:border-blue-100"
             >
-              <CardHeader className="pb-2 bg-gradient-to-r from-blue-50 to-indigo-50">
+              <CardHeader className={`pb-2 bg-gradient-to-r ${theme.cardGradient}`}>
                 <div className="flex justify-between items-start">
                   <div>
                     <CardTitle className="flex items-center gap-2">
                       <span className="text-3xl">{getCategoryIcon(quiz.category)}</span>
-                      <span className="text-blue-800">{quiz.title}</span>
+                      <span className={theme.textPrimary}>{quiz.title}</span>
                     </CardTitle>
                     <CardDescription className="font-medium text-gray-600">{quiz.description}</CardDescription>
                   </div>
@@ -95,10 +91,10 @@ export function HomePage() {
                   {quiz.questions.length} questions
                 </p>
               </CardContent>
-              <CardFooter className="bg-gradient-to-r from-blue-50 to-indigo-50 pt-2">
+              <CardFooter className={`bg-gradient-to-r ${theme.cardGradient} pt-2`}>
                 <Button 
                   onClick={() => createGame(quiz.id)}
-                  className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 shadow-md"
+                  className={`w-full bg-gradient-to-r ${theme.buttonGradient} hover:opacity-90 shadow-md`}
                 >
                   <Play className="mr-2 h-4 w-4" />
                   Host Game
@@ -107,6 +103,21 @@ export function HomePage() {
             </Card>
           ))}
         </div>
+      </section>
+      
+      <section className="pt-4 pb-8">
+        <Card className={`bg-gradient-to-r ${theme.cardGradient} border-none shadow-md`}>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Settings className="h-5 w-5" />
+              <span>Customize Your Experience</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="mb-4">Change the look and feel of QuizVerse by selecting different color themes.</p>
+            <p>Click the palette icon <span className="inline-block p-1 bg-white rounded-full"><Settings className="h-4 w-4 inline" /></span> in the header to choose from our fun theme options!</p>
+          </CardContent>
+        </Card>
       </section>
     </div>
   )

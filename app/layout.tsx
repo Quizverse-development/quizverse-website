@@ -4,6 +4,7 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import AuthProvider from "@/components/auth-provider"
 import { ThemeProvider } from "@/components/theme-provider"
+import { ThemeProviderCustom } from "@/components/theme-provider-custom"
 import { Toaster } from "@/components/ui/toaster"
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { getServerSession } from "@/lib/auth"
@@ -33,12 +34,14 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <AuthProvider>
-            {children}
-            <Toaster />
-            <SpeedInsights />
-            <MobileLink />
-          </AuthProvider>
+          <ThemeProviderCustom>
+            <AuthProvider>
+              {children}
+              <Toaster />
+              <SpeedInsights />
+              <MobileLink />
+            </AuthProvider>
+          </ThemeProviderCustom>
         </ThemeProvider>
       </body>
     </html>

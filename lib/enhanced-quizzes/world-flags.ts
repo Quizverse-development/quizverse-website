@@ -2,7 +2,7 @@ import { Quiz } from "../game-store";
 
 export const WorldFlagsQuiz: Quiz = {
   id: 'world-flags',
-  title: 'World Flags Challenge',
+  title: '50 Question Flag Quiz',
   description: 'Test your knowledge of 50 challenging country flags from around the world',
   category: 'Geography',
   questions: [

@@ -6,6 +6,7 @@ import { JoinGameDialog } from "@/components/join-game-dialog"
 import { CreateGameDialog } from "@/components/create-game-dialog"
 import { Button } from "@/components/ui/button"
 import { useSession } from "@/components/auth-provider"
+import { ThemeSelector } from "@/components/theme-selector"
 
 export function Header() {
   const { data: session } = useSession()
@@ -36,11 +37,9 @@ export function Header() {
             <div className="hidden sm:block">
               <JoinGameDialog />
             </div>
-            <div className="hidden sm:block">
-              <CreateGameDialog />
-            </div>
           </>
         )}
+        <ThemeSelector />
         <UserAuthButton />
       </div>
     </header>

@@ -46,8 +46,8 @@ export const ANIMALS = [
 export const PREMADE_QUIZZES: Quiz[] = [
   {
     id: 'flags',
-    title: 'World Flags',
-    description: 'Test your knowledge of country flags',
+    title: '15 Question Flag Quiz',
+    description: 'Test your knowledge of 15 common country flags',
     category: 'Geography',
     questions: [
       { id: 1, question: 'Which country has a flag with red and white stripes and white stars on a blue rectangle?', options: ['Canada', 'United States', 'Mexico', 'Brazil'], correctAnswer: 1, timeLimit: 20 },
