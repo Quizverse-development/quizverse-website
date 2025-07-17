@@ -11,7 +11,7 @@ export default async function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 w-screen overflow-x-hidden">
       <Header />
       <main className="container mx-auto px-4 pt-24 pb-8">
         <AdminDashboard />

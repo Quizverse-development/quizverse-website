@@ -73,7 +73,7 @@ export function HomePage() {
                 <div className="flex justify-between items-start">
                   <div>
                     <CardTitle className="flex items-center gap-2">
-                      <span className="text-3xl">{getCategoryIcon(quiz.category)}</span>
+                      <span className="text-3xl text-purple-600">{getCategoryIcon(quiz.category)}</span>
                       <span className="text-black">{quiz.title}</span>
                     </CardTitle>
                     <CardDescription className="font-medium text-purple-700">{quiz.description}</CardDescription>

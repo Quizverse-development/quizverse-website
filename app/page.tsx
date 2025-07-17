@@ -13,7 +13,7 @@ export default function MainPage() {
   const { data: session } = useSession()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 w-screen overflow-x-hidden">
       <Header />
       <main className="container mx-auto px-4 pt-20 pb-8 sm:pt-24">
         {!session ? (

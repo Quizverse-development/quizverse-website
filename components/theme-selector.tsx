@@ -23,12 +23,18 @@ export function ThemeSelector() {
   }, [])
   
   const handleThemeChange = (themeId: string) => {
-    setCurrentTheme(themeId)
-    saveThemePreference(themeId)
-    setOpen(false)
-    
-    // Force page reload to apply theme
-    window.location.reload()
+    try {
+      setCurrentTheme(themeId)
+      saveThemePreference(themeId)
+      setOpen(false)
+      
+      // Force page reload to apply theme
+      window.location.reload()
+    } catch (error) {
+      console.error('Error changing theme:', error)
+      // Keep dialog open if there's an error
+      alert('Failed to change theme. Please try again.')
+    }
   }
   
   return (

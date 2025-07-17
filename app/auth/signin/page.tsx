@@ -125,11 +125,11 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-indigo-100 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-indigo-100 p-4 w-screen overflow-x-hidden">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-xl sm:text-2xl">Welcome to QuizVerse</CardTitle>
-          <p className="text-gray-600 text-sm sm:text-base">Sign in or create an account</p>
+          <CardTitle className="text-xl sm:text-2xl text-black">Welcome to QuizVerse</CardTitle>
+          <p className="text-purple-700 text-sm sm:text-base">Sign in or create an account</p>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="login" className="w-full">

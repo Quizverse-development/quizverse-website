@@ -12,7 +12,7 @@ export function Header() {
   const { data: session } = useSession()
 
   return (
-    <header className="w-full bg-white/80 backdrop-blur-md shadow-sm border-b px-4 py-3 sm:p-4 flex items-center justify-between fixed top-0 left-0 z-50">
+    <header className="w-full bg-white/80 backdrop-blur-md shadow-sm border-b px-4 py-3 sm:p-4 flex items-center justify-between fixed top-0 left-0 z-50 max-w-[100vw] overflow-x-hidden">
       <div className="flex items-center gap-6">
         <Link href="/" className="text-xl sm:text-2xl font-bold text-purple-600 hover:text-purple-700 transition-colors">
           QuizVerse
