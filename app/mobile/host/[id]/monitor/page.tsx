@@ -5,7 +5,6 @@ import { useParams, useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
 import { Timer, Users, Trophy, ArrowRight } from "lucide-react"
 import { formatRemainingTime } from "@/lib/game-utils"
 
@@ -87,8 +86,8 @@ export default function MobileHostMonitorPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
-      <div className="container mx-auto max-w-md">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4 w-full max-w-full">
+      <div className="w-full max-w-md mx-auto">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-xl font-bold">Game Monitor</h1>
           <Badge variant="outline" className="text-sm">
@@ -149,7 +148,7 @@ export default function MobileHostMonitorPage() {
               {leaderboard.length === 0 ? (
                 <p className="text-center text-gray-500 py-2">No scores yet</p>
               ) : (
-                leaderboard.slice(0, 5).map((player, index) => (
+                leaderboard.map((player, index) => (
                   <div
                     key={player.id}
                     className={`flex items-center justify-between p-2 rounded-md ${

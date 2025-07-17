@@ -152,7 +152,9 @@ export function getCurrentQuestion(gameId: string): Question | null {
   const game = games.get(gameId)
   if (!game) return null
   
-  const quiz = PREMADE_QUIZZES.find(q => q.id === game.quizId)
+  // Use getAllQuizzes to find the quiz from all available sources
+  const allQuizzes = getAllQuizzes()
+  const quiz = allQuizzes.find(q => q.id === game.quizId)
   if (!quiz) return null
   
   return quiz.questions.find(q => q.id === game.currentQuestion) || null
@@ -194,7 +196,9 @@ export function submitAnswer(gameId: string, playerId: string, questionId: numbe
   const player = game.players.find(p => p.id === playerId)
   if (!player) return false
 
-  const quiz = PREMADE_QUIZZES.find(q => q.id === game.quizId)
+  // Use getAllQuizzes to find the quiz from all available sources
+  const allQuizzes = getAllQuizzes()
+  const quiz = allQuizzes.find(q => q.id === game.quizId)
   if (!quiz) return false
 
   const question = quiz.questions.find(q => q.id === questionId)
@@ -202,9 +206,8 @@ export function submitAnswer(gameId: string, playerId: string, questionId: numbe
 
   const correct = question.options[question.correctAnswer] === answer
   if (correct) {
-    // Score based on speed (max 1000 points, min 100 points)
-    const speedBonus = Math.max(100, 1000 - (timeMs / (question.timeLimit * 1000)) * 900)
-    player.score += Math.round(speedBonus)
+    // Fixed points for correct answers - no time penalty
+    player.score += 100
   }
 
   player.answers.push({ questionId, answer, correct, timeMs })

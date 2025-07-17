@@ -12,18 +12,20 @@ import { PREMADE_QUIZZES } from "@/lib/game-store"
 import { ADDITIONAL_QUIZZES } from "@/lib/quiz-utils"
 import { ENHANCED_QUIZZES } from "@/lib/enhanced-quizzes"
 import { getCategoryIcon } from "@/lib/quiz-utils"
-
-// Combine all quizzes
-const allQuizzes = [...PREMADE_QUIZZES, ...ADDITIONAL_QUIZZES, ...ENHANCED_QUIZZES]
+import { getAllQuizzes } from "@/lib/game-utils"
 
 export default function MobilePage() {
   const router = useRouter()
   const [gameCode, setGameCode] = useState("")
   const [username, setUsername] = useState("")
   const [selectedQuiz, setSelectedQuiz] = useState("")
+  const [timeLimit, setTimeLimit] = useState("10")
   const [isCreating, setIsCreating] = useState(false)
   const [isJoining, setIsJoining] = useState(false)
   const [error, setError] = useState("")
+  
+  // Get all available quizzes
+  const allQuizzes = getAllQuizzes()
   
   const handleJoinGame = async () => {
     if (!gameCode || !username) {
@@ -74,7 +76,7 @@ export default function MobilePage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           quizId: selectedQuiz,
-          timeLimit: 10 // Default 10 minutes
+          timeLimit: parseInt(timeLimit) || 10
         })
       })
       
@@ -92,8 +94,8 @@ export default function MobilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
-      <div className="container mx-auto max-w-md">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4 w-full max-w-full">
+      <div className="w-full max-w-md mx-auto">
         <div className="flex justify-center mb-8">
           <div className="flex items-center gap-2">
             <Smartphone className="h-6 w-6 text-blue-600" />
@@ -185,6 +187,21 @@ export default function MobilePage() {
                     </select>
                   </div>
                   
+                  <div className="space-y-2">
+                    <Label htmlFor="timeLimit">Game Time Limit (minutes)</Label>
+                    <Input 
+                      id="timeLimit" 
+                      type="number" 
+                      min="1" 
+                      max="60" 
+                      value={timeLimit} 
+                      onChange={(e) => setTimeLimit(e.target.value)}
+                    />
+                    <p className="text-xs text-gray-500">
+                      Players will have this much time to answer as many questions as possible.
+                    </p>
+                  </div>
+                  
                   {error && (
                     <div className="bg-red-50 text-red-600 p-2 rounded-md text-sm">
                       {error}
@@ -194,7 +211,7 @@ export default function MobilePage() {
                   <Button 
                     className="w-full bg-blue-600 hover:bg-blue-700"
                     onClick={handleCreateGame}
-                    disabled={isCreating}
+                    disabled={!selectedQuiz || isCreating}
                   >
                     {isCreating ? 'Creating...' : 'Create Game'}
                   </Button>

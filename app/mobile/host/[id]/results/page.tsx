@@ -27,8 +27,8 @@ export default function MobileHostResultsPage() {
   }, [params.id])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
-      <div className="container mx-auto max-w-md">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4 w-full max-w-full">
+      <div className="w-full max-w-md mx-auto">
         <div className="text-center mb-6">
           <Trophy className="h-16 w-16 text-yellow-500 mx-auto mb-2" />
           <h1 className="text-2xl font-bold">Game Complete!</h1>

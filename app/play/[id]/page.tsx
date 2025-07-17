@@ -141,7 +141,7 @@ export default function PlayPage() {
           playerId: player.id,
           questionId: currentQuestion.id,
           answer: selectedAnswer || "",
-          timeMs: 1000 // Fixed time since we don't track per-question time
+          timeMs: 0 // Time doesn't matter anymore
         })
       })
       
@@ -150,11 +150,11 @@ export default function PlayPage() {
         .then(res => res.json())
         .then(data => setLeaderboard(data.leaderboard || []))
       
-      // Auto-advance to next question after a short delay
+      // Auto-advance to next question immediately
       setTimeout(() => {
         setSelectedAnswer("");
         setShowResults(false);
-      }, 1000);
+      }, 500); // Shorter delay for faster gameplay
         
     } catch (error) {
       console.error('Failed to submit answer:', error)
